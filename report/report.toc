@@ -1,17 +1,18 @@
-\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
-\contentsline {section}{\numberline {2}Week by Week}{1}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Week 1}{1}{subsection.2.1}%
-\contentsline {paragraph}{Exercise 1}{1}{section*.3}%
-\contentsline {subparagraph}{Accepted Words Table}{1}{section*.4}%
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Introduction}{2}{section.2}%
+\contentsline {section}{\numberline {3}Week by Week}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Week 1}{2}{subsection.3.1}%
+\contentsline {paragraph}{Exercise 1}{2}{section*.3}%
+\contentsline {subparagraph}{Accepted Words Table}{2}{section*.4}%
 \contentsline {subparagraph}{Language Descriptions}{2}{section*.5}%
 \contentsline {paragraph}{Exercise 2 -- Designing DFAs}{2}{section*.6}%
 \contentsline {subparagraph}{1. Words that end with $ab$}{2}{section*.7}%
 \contentsline {subparagraph}{2. Words that contain $aba$}{2}{section*.8}%
-\contentsline {subparagraph}{3. Odd number of $a$'s and odd number of $b$'s}{2}{section*.9}%
-\contentsline {subparagraph}{4. Even number of $a$'s and odd number of $b$'s}{2}{section*.10}%
-\contentsline {subparagraph}{5. Any three consecutive characters contain at least one $a$}{2}{section*.11}%
+\contentsline {subparagraph}{3. Odd number of $a$'s and odd number of $b$'s}{3}{section*.9}%
+\contentsline {subparagraph}{4. Even number of $a$'s and odd number of $b$'s}{3}{section*.10}%
+\contentsline {subparagraph}{5. Any three consecutive characters contain at least one $a$}{3}{section*.11}%
 \contentsline {subparagraph}{6. Words that contain $bbb$}{3}{section*.12}%
 \contentsline {paragraph}{Observation}{3}{section*.13}%
-\contentsline {section}{\numberline {3}Synthesis}{3}{section.3}%
-\contentsline {section}{\numberline {4}Evidence of Participation}{3}{section.4}%
-\contentsline {section}{\numberline {5}Conclusion}{3}{section.5}%
+\contentsline {section}{\numberline {4}Synthesis}{3}{section.4}%
+\contentsline {section}{\numberline {5}Evidence of Participation}{3}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{3}{section.6}%
