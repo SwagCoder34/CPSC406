@@ -13,6 +13,9 @@
 \contentsline {subparagraph}{5. Any three consecutive characters contain at least one $a$}{3}{section*.11}%
 \contentsline {subparagraph}{6. Words that contain $bbb$}{3}{section*.12}%
 \contentsline {paragraph}{Observation}{3}{section*.13}%
-\contentsline {section}{\numberline {4}Synthesis}{4}{section.4}%
-\contentsline {section}{\numberline {5}Evidence of Participation}{4}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{4}{section.6}%
+\contentsline {subsection}{\numberline {3.2}Week 2}{3}{subsection.3.2}%
+\contentsline {paragraph}{Exercise 1 (Product automata).}{3}{section*.15}%
+\contentsline {paragraph}{Exercise 2 (More automata).}{5}{section*.16}%
+\contentsline {section}{\numberline {4}Synthesis}{6}{section.4}%
+\contentsline {section}{\numberline {5}Evidence of Participation}{6}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{6}{section.6}%

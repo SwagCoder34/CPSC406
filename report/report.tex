@@ -234,6 +234,178 @@ Equivalent to forbidding substring $bbb$.
 \item Problems 1 and 2 track progress toward matching a pattern.
 \end{itemize}
 
+\subsection{Week 2}
+\subsubsection*{HW2 -- Operations on automata}
+
+\paragraph{Exercise 1 (Product automata).}
+
+Throughout, $\Sigma=\{a,b\}$.
+
+\medskip
+\textbf{1. Description of $L(A^{(1)})$ and $L(A^{(2)})$.}
+
+\medskip
+\underline{$A^{(1)}$:}
+
+The accepting states are $\{2,4\}$ and state $3$ is a non-accepting sink (it loops on both $a$ and $b$).
+From state $2$, reading $a$ goes to the sink; from state $4$, reading $b$ goes to the sink.
+Thus, once the first symbol is read, the letters must alternate in order to avoid the sink.
+
+Therefore,
+\[
+L(A^{(1)})=\{\,w\in\{a,b\}^* : |w|\ge 1 \text{ and $w$ contains no substring $aa$ or $bb$}\,\}.
+\]
+
+Equivalently,
+\[
+L(A^{(1)}) = a(ba)^*(\varepsilon \mid b)\ \cup\ b(ab)^*(\varepsilon \mid a).
+\]
+
+\medskip
+\underline{$A^{(2)}$:}
+
+The only accepting state is $2$. From state $1$, reading $b$ leads to a sink.
+Reading $a$ moves $1 \to 2$, and from $2$ any symbol returns to $1$.
+
+Thus a word must:
+\begin{itemize}
+\item start with $a$,
+\item have odd length,
+\item have $a$ in every odd position.
+\end{itemize}
+
+Hence,
+\[
+L(A^{(2)}) = a\big((a\mid b)a\big)^*.
+\]
+
+\medskip
+\textbf{2. Intersection automaton $A = A^{(1)} \times A^{(2)}$.}
+
+\begin{itemize}
+\item States: $Q = Q_1 \times Q_2$
+\item Start state: $(1,1)$
+\item Accepting states:
+\[
+F = F_1 \times F_2 = \{2,4\}\times\{2\}
+\]
+\item Transition function:
+\[
+\delta((p,q),x) = (\delta_1(p,x), \delta_2(q,x))
+\]
+\end{itemize}
+
+The reachable accepting state is $(2,2)$.
+
+\medskip
+\textbf{3. Proof that $L(A)=L(A^{(1)})\cap L(A^{(2)})$.}
+
+For any word $w$, by induction on prefixes, after reading $w$ the product automaton is in state
+\[
+(\delta_1(1,w),\delta_2(1,w)).
+\]
+Thus $A$ accepts $w$ iff both component automata accept $w$.
+Therefore,
+\[
+L(A)=L(A^{(1)})\cap L(A^{(2)}).
+\]
+
+\medskip
+\textbf{4. Construction of union automaton $A'$.}
+
+Keep the same product states and transitions, but define the accepting set as
+\[
+F' = (F_1\times Q_2)\ \cup\ (Q_1\times F_2).
+\]
+Then $A'$ accepts whenever at least one component accepts, so
+\[
+L(A') = L(A^{(1)}) \cup L(A^{(2)}).
+\]
+
+\bigskip
+\paragraph{Exercise 2 (More automata).}
+
+\medskip
+\textbf{1. Description of $L(B^{(1)})$ and $L(B^{(2)})$.}
+
+\medskip
+\underline{$B^{(1)}$:}
+
+State $p_0$ is accepting. Reading $a$ cycles
+\[
+p_0 \to p_1 \to p_2 \to p_0,
+\]
+while $b$ loops at each state.
+
+Thus $B^{(1)}$ accepts exactly when the number of $a$'s is divisible by $3$:
+\[
+L(B^{(1)})=\{\,w\in\{a,b\}^* : \#_a(w)\equiv 0 \pmod 3\,\}.
+\]
+
+\medskip
+\underline{$B^{(2)}$:}
+
+State $q_0$ is accepting. The automaton goes to a sink $q_2$ if the substring $aa$ occurs.
+Also, $q_1$ is non-accepting, so a word ending in $a$ is rejected.
+
+Hence
+\[
+L(B^{(2)})=\{\,w\in\{a,b\}^* : \text{$w$ has no substring $aa$ and does not end with $a$}\,\}.
+\]
+Equivalently,
+\[
+L(B^{(2)}) = (b \mid ab)^*.
+\]
+
+\medskip
+\textbf{2. Intersection automaton $B = B^{(1)} \times B^{(2)}$.}
+
+\begin{itemize}
+\item Start state: $(p_0,q_0)$
+\item Accepting states:
+\[
+F = \{(p_0,q_0)\}
+\]
+\item Transition function:
+\[
+\delta((p_i,q_j),x)=(\delta_1(p_i,x),\delta_2(q_j,x))
+\]
+\end{itemize}
+
+\medskip
+\textbf{3. Proof that $L(B)=L(B^{(1)})\cap L(B^{(2)})$.}
+
+After reading any word $w$, the product automaton is in state
+\[
+(\delta_1(p_0,w),\delta_2(q_0,w)).
+\]
+Thus $B$ accepts $w$ iff both component automata accept $w$.
+Therefore,
+\[
+L(B)=L(B^{(1)})\cap L(B^{(2)}).
+\]
+
+\medskip
+\textbf{4. Construction of union automaton $B'$.}
+
+Using De Morgan's law:
+\[
+L(B^{(1)})\cup L(B^{(2)})
+=
+\overline{\ \overline{L(B^{(1)})}\ \cap\ \overline{L(B^{(2)})}\ }.
+\]
+
+\begin{enumerate}
+\item Complement $B^{(1)}$ and $B^{(2)}$ by swapping accepting and non-accepting states.
+\item Construct their product automaton for intersection.
+\item Complement the resulting automaton.
+\end{enumerate}
+
+This yields $B'$ such that
+\[
+L(B') = L(B^{(1)}) \cup L(B^{(2)}).
+\]
+
 
 \section{Synthesis}
 
@@ -242,7 +414,7 @@ Equivalent to forbidding substring $bbb$.
 \section{Conclusion}\label{conclusion}
 
 \begin{thebibliography}{99}
-\bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+\bibitem[BLA]{bla} Nathan Carnnahan, \href{https://en.wikipedia.org/wiki/LaTeX}{CPSC-406 Report}, Nathan Carnnahan, 2026.
 \end{thebibliography}
 
 \end{document}
