@@ -97,14 +97,14 @@ We are given two DFAs $A_1$ and $A_2$.
 \begin{center}
 \begin{tabular}{c|c|c}
 $w$ & Accepted by $A_1$? & Accepted by $A_2$? \\ \hline
-aaa & No & Yes \\
-aab & Yes & No \\
-aba & No & No \\
-abb & No & No \\
-baa & No & Yes \\
-bab & No & No \\
-bba & No & No \\
-bbb & No & No \\
+$aaa$ & No & Yes \\
+$aab$ & Yes & No \\
+$aba$ & No & No \\
+$abb$ & No & No \\
+$baa$ & No & Yes \\
+$bab$ & No & No \\
+$bba$ & No & No \\
+$bbb$ & No & No \\
 \end{tabular}
 \end{center}
 
@@ -131,9 +131,9 @@ bbb & No & No \\
 (q0) edge [loop above] node {b} ()
      edge node {a} (q1)
 (q1) edge [loop above] node {a} ()
-     edge node {b} (q2)
-(q2) edge node {a} (q1)
-     edge[bend left] node {b} (q0);
+     edge [bend left = 10] node {b} (q2)
+(q2) edge [bend left = 10] node {a} (q1)
+     edge[bend left=30] node {b} (q0);
 \end{tikzpicture}
 \end{center}
 
@@ -201,7 +201,7 @@ Equivalent to forbidding substring $bbb$.
 (q1) edge node {b} (q2)
      edge[bend left] node {a} (q0)
 (q2) edge node {b} (q3)
-     edge[bend left] node {a} (q0)
+     edge[bend left = 50] node {a} (q0)
 (q3) edge[loop above] node {a,b} ();
 \end{tikzpicture}
 \end{center}
@@ -221,7 +221,7 @@ Equivalent to forbidding substring $bbb$.
 (q1) edge node {b} (q2)
      edge[bend left] node {a} (q0)
 (q2) edge node {b} (q3)
-     edge[bend left] node {a} (q0)
+     edge[bend left = 50] node {a} (q0)
 (q3) edge[loop above] node {a,b} ();
 \end{tikzpicture}
 \end{center}
