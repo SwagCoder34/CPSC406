@@ -407,6 +407,34 @@ L(B') = L(B^{(1)}) \cup L(B^{(2)}).
 \]
 
 
+\paragraph{Exercise 2.2.7}
+Let $A$ be a DFA and let $q$ be a state such that $\delta(q,a)=q$ for all input symbols $a\in\Sigma$.
+We prove by induction on $|w|$ that for all strings $w\in\Sigma^*$, $\hat{\delta}(q,w)=q$.
+
+\begin{proof}
+\textbf{Base case:} $|w|=0$, so $w=\varepsilon$.
+By definition of $\hat{\delta}$, $\hat{\delta}(q,\varepsilon)=q$.
+
+\textbf{Inductive step:} Assume that for some $n\ge 0$, for every string $x\in\Sigma^*$ with $|x|=n$ we have $\hat{\delta}(q,x)=q$.
+Let $w\in\Sigma^*$ be any string with $|w|=n+1$.
+Then $w$ can be written as $w=xa$ where $|x|=n$ and $a\in\Sigma$ is the last symbol.
+Using the recursive definition of $\hat{\delta}$,
+\[
+\hat{\delta}(q,xa)=\delta(\hat{\delta}(q,x),a).
+\]
+By the inductive hypothesis, $\hat{\delta}(q,x)=q$, so
+\[
+\hat{\delta}(q,xa)=\delta(q,a)=q,
+\]
+where the last equality uses the assumption that $\delta(q,a)=q$ for all $a\in\Sigma$.
+Thus $\hat{\delta}(q,w)=q$ for all $w$ of length $n+1$.
+
+By induction, $\hat{\delta}(q,w)=q$ for all $w\in\Sigma^*$.
+\end{proof}
+
+\paragraph{Interesting Question for Discord (from \S 2.2.4)}
+Can the same automaton be setup to accept multiple languages? If so, can we use the same automaton hardware to create a multifunctional dfa?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}

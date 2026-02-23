@@ -16,6 +16,8 @@
 \contentsline {subsection}{\numberline {3.2}Week 2}{3}{subsection.3.2}%
 \contentsline {paragraph}{Exercise 1 (Product automata).}{3}{section*.15}%
 \contentsline {paragraph}{Exercise 2 (More automata).}{5}{section*.16}%
+\contentsline {paragraph}{Exercise 2.2.7}{6}{section*.17}%
+\contentsline {paragraph}{Interesting Question for Discord (from \S 2.2.4)}{6}{section*.18}%
 \contentsline {section}{\numberline {4}Synthesis}{6}{section.4}%
 \contentsline {section}{\numberline {5}Evidence of Participation}{6}{section.5}%
 \contentsline {section}{\numberline {6}Conclusion}{6}{section.6}%

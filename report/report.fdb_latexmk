@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1771374608.81931 "/Users/natecarnnahan/Documents/school/CPSC406/report/report.tex" "report.pdf" "report" 1771374609.42634 0
-  "/Users/natecarnnahan/Documents/school/CPSC406/report/report.tex" 1771374608.0097 10415 0045ed04ecbffca2b03e68b67941e60e ""
+["pdflatex"] 1771833393.46891 "/Users/natecarnnahan/Documents/school/CPSC406/report/report.tex" "report.pdf" "report" 1771833394.50276 0
+  "/Users/natecarnnahan/Documents/school/CPSC406/report/report.tex" 1771833393.25719 11651 6942fd0f00e5954f1c62bb2fb71c9f9d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -15,6 +15,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm" 1136768653 3584 f80ddd985bd00e29e9a6047ebd9d4781 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecrm1440.tfm" 1136768653 3584 3169d30142b88a27d4ab0e3468e963a2 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecrm1728.tfm" 1136768653 3584 3c76ccb63eda935a68ba65ba9da29f1a ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecti1000.tfm" 1136768653 3072 3bce340d4c075dffe6d4ec732b4c32fe ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -48,6 +49,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb" 1215737283 138258 6525c253f16cededa14c7fd0da7f67b2 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb" 1215737283 131438 3aa300b3e40e5c8ba7b4e5c6cebc5dd6 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb" 1215737283 186554 e8f0fa8ca05e038f257a06405232745f ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1575674566 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty" 1576625341 40635 c40361e206be584d448876bba8a64a3b ""
@@ -185,10 +187,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1771368359 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "report.aux" 1771374609.37332 2747 93bd877434ecbfbca79db30a0a33ec16 "pdflatex"
-  "report.out" 1771374609.37396 850 e2b98d0da67fd633edd80be37484d6de "pdflatex"
-  "report.tex" 1771374608.0097 10415 0045ed04ecbffca2b03e68b67941e60e ""
-  "report.toc" 1771374609.37411 1543 67cb84e0095e06ecadb1d334e3084bb1 "pdflatex"
+  "report.aux" 1771833394.40424 2982 7b12b8c11b3d0defab121c7f290e65b6 "pdflatex"
+  "report.out" 1771833394.40512 850 e2b98d0da67fd633edd80be37484d6de "pdflatex"
+  "report.tex" 1771833393.25719 11651 6942fd0f00e5954f1c62bb2fb71c9f9d ""
+  "report.toc" 1771833394.40547 1695 ac32a32758e457a7231036197e77f1f5 "pdflatex"
   (generated)
   "report.aux"
   "report.log"
