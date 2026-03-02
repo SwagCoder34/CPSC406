@@ -1,23 +1,33 @@
 \contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
-\contentsline {section}{\numberline {2}Introduction}{2}{section.2}%
-\contentsline {section}{\numberline {3}Week by Week}{2}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Week 1}{2}{subsection.3.1}%
+\contentsline {section}{\numberline {2}Week by Week}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Week 1}{2}{subsection.2.1}%
 \contentsline {paragraph}{Exercise 1}{2}{section*.3}%
 \contentsline {subparagraph}{Accepted Words Table}{2}{section*.4}%
 \contentsline {subparagraph}{Language Descriptions}{2}{section*.5}%
 \contentsline {paragraph}{Exercise 2 -- Designing DFAs}{2}{section*.6}%
 \contentsline {subparagraph}{1. Words that end with $ab$}{2}{section*.7}%
 \contentsline {subparagraph}{2. Words that contain $aba$}{2}{section*.8}%
-\contentsline {subparagraph}{3. Odd number of $a$'s and odd number of $b$'s}{3}{section*.9}%
+\contentsline {subparagraph}{3. Odd number of $a$'s and odd number of $b$'s}{2}{section*.9}%
 \contentsline {subparagraph}{4. Even number of $a$'s and odd number of $b$'s}{3}{section*.10}%
 \contentsline {subparagraph}{5. Any three consecutive characters contain at least one $a$}{3}{section*.11}%
 \contentsline {subparagraph}{6. Words that contain $bbb$}{3}{section*.12}%
 \contentsline {paragraph}{Observation}{3}{section*.13}%
-\contentsline {subsection}{\numberline {3.2}Week 2}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {2.2}Week 2}{3}{subsection.2.2}%
 \contentsline {paragraph}{Exercise 1 (Product automata).}{3}{section*.15}%
 \contentsline {paragraph}{Exercise 2 (More automata).}{5}{section*.16}%
-\contentsline {paragraph}{Exercise 2.2.7}{6}{section*.17}%
-\contentsline {paragraph}{Interesting Question for Discord (from \S 2.2.4)}{6}{section*.18}%
-\contentsline {section}{\numberline {4}Synthesis}{6}{section.4}%
-\contentsline {section}{\numberline {5}Evidence of Participation}{6}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{6}{section.6}%
+\contentsline {paragraph}{Exercise 2.2.7}{7}{section*.17}%
+\contentsline {paragraph}{Interesting Question for Discord (from \S 2.2.4)}{7}{section*.18}%
+\contentsline {subsection}{\numberline {2.3}Week 3}{7}{subsection.2.3}%
+\contentsline {paragraph}{1. Regular expression for $L(A)$.}{8}{section*.21}%
+\contentsline {paragraph}{2. NFA specification $(Q,\Sigma ,\delta ,q_0,F)$.}{8}{section*.22}%
+\contentsline {paragraph}{3. All paths for $v=abab$.}{8}{section*.23}%
+\contentsline {paragraph}{4. Determinization $A^D$ (powerset construction).}{8}{section*.24}%
+\contentsline {subparagraph}{Transition table for $A^D$.}{9}{section*.25}%
+\contentsline {subparagraph}{Graphical depiction of $A^D$.}{9}{section*.26}%
+\contentsline {paragraph}{1. Determinization $A^D$ (powerset construction).}{9}{section*.28}%
+\contentsline {subparagraph}{Transition table for $A^D$.}{9}{section*.29}%
+\contentsline {subparagraph}{Graphical depiction of $A^D$.}{10}{section*.30}%
+\contentsline {paragraph}{2. Smaller DFA accepting the same language.}{10}{section*.31}%
+\contentsline {section}{\numberline {3}Synthesis}{10}{section.3}%
+\contentsline {section}{\numberline {4}Evidence of Participation}{10}{section.4}%
+\contentsline {section}{\numberline {5}Conclusion}{10}{section.5}%

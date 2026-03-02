@@ -79,8 +79,6 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 \clearpage
-\section{Introduction}
-
 \section{Introduction}\label{intro}
 
 \section{Week by Week}\label{homework}
@@ -247,6 +245,24 @@ Throughout, $\Sigma=\{a,b\}$.
 \medskip
 \underline{$A^{(1)}$:}
 
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,on grid,auto]
+\node[state,initial] (1) {$1$};
+\node[state,accepting] (2) [right=of 1] {$2$};
+\node[state] (3) [right=of 2] {$3$};
+\node[state,accepting] (4) [below=of 2] {$4$};
+
+\path[->]
+(1) edge node {$a$} (2)
+    edge node[left] {$b$} (4)
+(2) edge node {$a$} (3)
+    edge node[right] {$b$} (4)
+(3) edge[loop above] node {$a,b$} ()
+(4) edge[bend left=15] node {$a$} (2)
+    edge node[below left] {$b$} (3);
+\end{tikzpicture}
+\end{center}
+
 The accepting states are $\{2,4\}$ and state $3$ is a non-accepting sink (it loops on both $a$ and $b$).
 From state $2$, reading $a$ goes to the sink; from state $4$, reading $b$ goes to the sink.
 Thus, once the first symbol is read, the letters must alternate in order to avoid the sink.
@@ -263,6 +279,20 @@ L(A^{(1)}) = a(ba)^*(\varepsilon \mid b)\ \cup\ b(ab)^*(\varepsilon \mid a).
 
 \medskip
 \underline{$A^{(2)}$:}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,on grid,auto]
+\node[state,initial] (1) {$1$};
+\node[state,accepting] (2) [right=of 1] {$2$};
+\node[state] (3) [below=of 1] {$3$};
+
+\path[->]
+(1) edge node {$a$} (2)
+    edge node[left] {$b$} (3)
+(2) edge[loop above] node {$a,b$} ()
+(3) edge[loop below] node {$a,b$} ();
+\end{tikzpicture}
+\end{center}
 
 The only accepting state is $2$. From state $1$, reading $b$ leads to a sink.
 Reading $a$ moves $1 \to 2$, and from $2$ any symbol returns to $1$.
@@ -296,6 +326,28 @@ F = F_1 \times F_2 = \{2,4\}\times\{2\}
 \end{itemize}
 
 The reachable accepting state is $(2,2)$.
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.2cm,on grid,auto]
+\node[state,initial] (11) {$(1,1)$};
+\node[state,accepting] (22) [right=of 11] {$(2,2)$};
+\node[state] (33) [right=of 22] {$(3,2)$};
+\node[state] (43) [below=of 11] {$(4,3)$};
+\node[state,accepting] (42) [below=of 22] {$(4,2)$};
+\node[state] (32) [below=of 33] {$(3,3)$};
+
+\path[->]
+(11) edge node {$a$} (22)
+     edge node[left] {$b$} (43)
+(22) edge node {$a$} (33)
+     edge node[right] {$b$} (42)
+(33) edge[loop above] node {$a,b$} ()
+(43) edge[loop left] node {$a,b$} ()
+(42) edge node {$a$} (33)
+     edge node[below] {$b$} (32)
+(32) edge[loop right] node {$a,b$} ();
+\end{tikzpicture}
+\end{center}
 
 \medskip
 \textbf{3. Proof that $L(A)=L(A^{(1)})\cap L(A^{(2)})$.}
@@ -331,6 +383,22 @@ L(A') = L(A^{(1)}) \cup L(A^{(2)}).
 \medskip
 \underline{$B^{(1)}$:}
 
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,on grid,auto]
+\node[state,initial,accepting] (p0) {$p_0$};
+\node[state] (p1) [right=of p0] {$p_1$};
+\node[state] (p2) [right=of p1] {$p_2$};
+
+\path[->]
+(p0) edge[loop above] node {$b$} ()
+     edge node {$a$} (p1)
+(p1) edge[loop above] node {$b$} ()
+     edge node {$a$} (p2)
+(p2) edge[loop above] node {$b$} ()
+     edge[bend left=30] node {$a$} (p0);
+\end{tikzpicture}
+\end{center}
+
 State $p_0$ is accepting. Reading $a$ cycles
 \[
 p_0 \to p_1 \to p_2 \to p_0,
@@ -344,6 +412,21 @@ L(B^{(1)})=\{\,w\in\{a,b\}^* : \#_a(w)\equiv 0 \pmod 3\,\}.
 
 \medskip
 \underline{$B^{(2)}$:}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,on grid,auto]
+\node[state,initial,accepting] (q0) {$q_0$};
+\node[state] (q1) [right=of q0] {$q_1$};
+\node[state] (q2) [right=of q1] {$q_2$};
+
+\path[->]
+(q0) edge[loop above] node {$b$} ()
+     edge node {$a$} (q1)
+(q1) edge[bend left=15] node {$b$} (q0)
+     edge node {$a$} (q2)
+(q2) edge[loop above] node {$a,b$} ();
+\end{tikzpicture}
+\end{center}
 
 State $q_0$ is accepting. The automaton goes to a sink $q_2$ if the substring $aa$ occurs.
 Also, $q_1$ is non-accepting, so a word ending in $a$ is rejected.
@@ -371,6 +454,30 @@ F = \{(p_0,q_0)\}
 \delta((p_i,q_j),x)=(\delta_1(p_i,x),\delta_2(q_j,x))
 \]
 \end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.2cm,on grid,auto]
+\node[state,initial,accepting] (p0q0) {$(p_0,q_0)$};
+\node[state] (p1q1) [right=of p0q0] {$(p_1,q_1)$};
+\node[state] (p1q0) [below=of p0q0] {$(p_1,q_0)$};
+\node[state] (p2q0) [right=of p1q0] {$(p_2,q_0)$};
+\node[state] (p2q1) [right=of p1q1] {$(p_2,q_1)$};
+\node[state] (sink) [below=of p2q1] {$(\cdot,q_2)$};
+
+\path[->]
+(p0q0) edge[loop above] node {$b$} ()
+       edge node {$a$} (p1q1)
+(p1q1) edge node {$b$} (p1q0)
+       edge node {$a$} (sink)
+(p1q0) edge[loop left] node {$b$} ()
+       edge node {$a$} (p2q1)
+(p2q1) edge node {$b$} (p2q0)
+       edge node {$a$} (sink)
+(p2q0) edge[loop below] node {$b$} ()
+       edge[bend left=20] node {$a$} (p0q0)
+(sink) edge[loop right] node {$a,b$} ();
+\end{tikzpicture}
+\end{center}
 
 \medskip
 \textbf{3. Proof that $L(B)=L(B^{(1)})\cap L(B^{(2)})$.}
@@ -434,6 +541,219 @@ By induction, $\hat{\delta}(q,w)=q$ for all $w\in\Sigma^*$.
 
 \paragraph{Interesting Question for Discord (from \S 2.2.4)}
 Can the same automaton be setup to accept multiple languages? If so, can we use the same automaton hardware to create a multifunctional dfa?
+
+\subsection{Week 3}
+\subsubsection*{Assignment 3 -- NFAs and Determinization}
+
+\subsubsection*{Question 1}
+For the alphabet $\Sigma=\{a,b,c\}$ consider the NFA $A$ shown in the prompt.
+
+\paragraph{1. Regular expression for $L(A)$.}
+From the start state $0$, we may read any number of $a$'s and $b$'s while staying in state $0$.
+At some point we must read an $a$ to move to state $1$, and then read exactly one more symbol ($b$ or $c$) to reach an accepting state.
+Therefore the language is
+\[
+L(A) = (a\mid b)^*\,a\,(b\mid c).
+\]
+
+\paragraph{2. NFA specification $(Q,\Sigma,\delta,q_0,F)$.}
+\begin{itemize}
+  \item $Q=\{0,1,2,3\}$
+  \item $\Sigma=\{a,b,c\}$
+  \item $q_0=0$
+  \item $F=\{2,3\}$
+  \item Transition function $\delta:Q\times\Sigma\to\mathcal{P}(Q)$ given by:
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$q$ & $\delta(q,a)$ & $\delta(q,b)$ & $\delta(q,c)$ \\ \hline
+$0$ & $\{0,1\}$ & $\{0\}$ & $\emptyset$ \\
+$1$ & $\emptyset$ & $\{2\}$ & $\{3\}$ \\
+$2$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+$3$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+\end{tabular}
+\end{center}
+
+\paragraph{3. All paths for $v=abab$.}
+Because $\delta(0,a)=\{0,1\}$, the first symbol $a$ branches into two threads.
+The diagram below shows all paths; the accepting path is marked with $\checkmark$ and the stuck path is marked with $\times$.
+
+\begin{center}
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=5cm},
+  level 2/.style={sibling distance=3cm},
+  level 3/.style={sibling distance=2.5cm},
+  level 4/.style={sibling distance=2cm},
+  every node/.style={draw, circle, minimum size=0.7cm},
+  edge from parent/.style={draw,->},
+  edge from parent path={(\tikzparentnode) -- (\tikzchildnode)},
+  label distance=2pt
+]
+\node {$0$}
+  child { node {$0$}
+    child { node {$0$}
+      child { node {$0$}
+        edge from parent node[draw=none,left] {$b$}
+      }
+      child { node {$1$}
+        child { node[double] {$2$} 
+          edge from parent node[draw=none,right] {$b$}
+        }
+        edge from parent node[draw=none,right] {$a$}
+      }
+      edge from parent node[draw=none,left] {$b$}
+    }
+    edge from parent node[draw=none,left] {$a$}
+  }
+  child { node {$1$}
+    child { node[double] {$2$}
+      child[dashed] { node[draw=none] {$\times$}
+        edge from parent node[draw=none,right] {$a$}
+      }
+      edge from parent node[draw=none,right] {$b$}
+    }
+    edge from parent node[draw=none,right] {$a$}
+  };
+\end{tikzpicture}
+\end{center}
+
+The rightmost branch gets stuck after reading $ab$ because state $2$ has no outgoing transitions.
+The only accepting computation is the leftmost path:
+\[
+0 \xrightarrow{a} 0 \xrightarrow{b} 0 \xrightarrow{a} 1 \xrightarrow{b} 2\;\checkmark
+\]
+
+\paragraph{4. Determinization $A^D$ (powerset construction).}
+The DFA states are subsets of $Q$. The reachable subsets are
+\[
+\{0\},\ \{0,1\},\ \{0,2\},\ \{3\},\ \emptyset.
+\]
+The start state is $\{0\}$ and the accepting DFA states are those subsets containing $2$ or $3$, i.e.
+\[
+F_D = \{\{0,2\},\{3\}\}.
+\]
+
+\subparagraph{Transition table for $A^D$.}
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$S$ & $\delta_D(S,a)$ & $\delta_D(S,b)$ & $\delta_D(S,c)$ \\ \hline
+$\{0\}$ & $\{0,1\}$ & $\{0\}$ & $\emptyset$ \\
+$\{0,1\}$ & $\{0,1\}$ & $\{0,2\}$ & $\{3\}$ \\
+$\{0,2\}$ & $\{0,1\}$ & $\{0\}$ & $\emptyset$ \\
+$\{3\}$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+$\emptyset$ & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+\end{tabular}
+\end{center}
+
+\subparagraph{Graphical depiction of $A^D$.}
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.2cm,on grid,auto]
+\node[state,initial] (S0) {$\{0\}$};
+\node[state] (S01) [right=of S0] {$\{0,1\}$};
+\node[state,accepting] (S02) [below=of S01] {$\{0,2\}$};
+\node[state,accepting] (S3) [right=of S01] {$\{3\}$};
+\node[state] (SE) [below=of S3] {$\emptyset$};
+
+\path[->]
+(S0) edge[loop above] node {b} ()
+     edge node {a} (S01)
+     edge[bend left=20] node {c} (SE)
+(S01) edge[loop above] node {a} ()
+      edge node {b} (S02)
+      edge node {c} (S3)
+(S02) edge[bend left=15] node {a} (S01)
+      edge[bend left=15] node {b} (S0)
+      edge[bend left=20] node {c} (SE)
+(S3) edge node {a,b,c} (SE)
+(SE) edge[loop right] node {a,b,c} (); 
+\end{tikzpicture}
+\end{center}
+
+\subsubsection*{Question 2}
+For the alphabet $\Sigma=\{0,1\}$ consider the NFA $A$ shown in the prompt.
+
+\paragraph{1. Determinization $A^D$ (powerset construction).}
+The NFA transitions are:
+\[
+\delta(q_0,0)=\{q_0\},\ \delta(q_0,1)=\{q_0,q_1\},\ \delta(q_1,1)=\{q_2\},\ \delta(q_2,0)=\{q_1,q_3\},\ \delta(q_3,0)=\delta(q_3,1)=\{q_3\}
+\]
+and all other transitions are $\emptyset$.
+
+The reachable DFA states (subsets) are:
+\[
+\{q_0\},\ \{q_0,q_1\},\ \{q_0,q_1,q_2\},\ \{q_0,q_1,q_3\},\ \{q_0,q_3\},\ \{q_0,q_1,q_2,q_3\}.
+\]
+Start state: $\{q_0\}$. Accepting DFA states are those containing $q_3$.
+
+\subparagraph{Transition table for $A^D$.}
+\begin{center}
+\begin{tabular}{c|c|c}
+$S$ & $\delta_D(S,0)$ & $\delta_D(S,1)$ \\ \hline
+$\{q_0\}$ & $\{q_0\}$ & $\{q_0,q_1\}$ \\
+$\{q_0,q_1\}$ & $\{q_0\}$ & $\{q_0,q_1,q_2\}$ \\
+$\{q_0,q_1,q_2\}$ & $\{q_0,q_1,q_3\}$ & $\{q_0,q_1,q_2\}$ \\
+$\{q_0,q_1,q_3\}$ & $\{q_0,q_3\}$ & $\{q_0,q_1,q_2,q_3\}$ \\
+$\{q_0,q_3\}$ & $\{q_0,q_3\}$ & $\{q_0,q_1,q_3\}$ \\
+$\{q_0,q_1,q_2,q_3\}$ & $\{q_0,q_1,q_3\}$ & $\{q_0,q_1,q_2,q_3\}$ \\
+\end{tabular}
+\end{center}
+
+\subparagraph{Graphical depiction of $A^D$.}
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.0cm,on grid,auto]
+\node[state,initial] (T0) {$\{q_0\}$};
+\node[state] (T01) [right=of T0] {$\{q_0,q_1\}$};
+\node[state] (T012) [right=of T01] {$\{q_0,q_1,q_2\}$};
+\node[state,accepting] (T013) [below=of T012] {$\{q_0,q_1,q_3\}$};
+\node[state,accepting] (T03) [left=of T013] {$\{q_0,q_3\}$};
+\node[state,accepting] (T0123) [right=of T013] {$\{q_0,q_1,q_2,q_3\}$};
+
+\path[->]
+(T0) edge[loop above] node {0} ()
+     edge node {1} (T01)
+(T01) edge[bend left=15] node {0} (T0)
+      edge node {1} (T012)
+(T012) edge[loop above] node {1} ()
+       edge node {0} (T013)
+(T013) edge node {0} (T03)
+       edge node {1} (T0123)
+(T03) edge[loop left] node {0} ()
+      edge[bend left=15] node {1} (T013)
+(T0123) edge[loop right] node {1} ()
+        edge[bend left=15] node {0} (T013);
+\end{tikzpicture}
+\end{center}
+
+\paragraph{2. Smaller DFA accepting the same language.}
+Intuitively, because $q_0$ loops on both $0$ and $1$, the NFA can ``start'' its nontrivial behavior at any position.
+To reach the accepting state $q_3$ we must read the pattern
+\[
+1\,1\,0
+\]
+in consecutive positions (take $q_0\xrightarrow{1}q_1\xrightarrow{1}q_2\xrightarrow{0}q_3$).
+Once in $q_3$, the automaton accepts and stays accepting forever.
+Thus the language is exactly the set of binary strings containing substring $110$.
+
+A minimal DFA for ``contains $110$'' has 4 states tracking the longest suffix that is also a prefix of $110$:
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.0cm,on grid,auto]
+\node[state,initial] (p0) {$p_0$};
+\node[state] (p1) [right=of p0] {$p_1$};
+\node[state] (p2) [right=of p1] {$p_2$};
+\node[state,accepting] (p3) [right=of p2] {$p_3$};
+
+\path[->]
+(p0) edge[loop above] node {0} ()
+     edge node {1} (p1)
+(p1) edge node {1} (p2)
+     edge[bend left=20] node {0} (p0)
+(p2) edge[loop above] node {1} ()
+     edge node {0} (p3)
+(p3) edge[loop above] node {0,1} (); 
+\end{tikzpicture}
+\end{center}
+Here $p_3$ is the accepting sink (we have seen $110$).
 
 \section{Synthesis}
 
