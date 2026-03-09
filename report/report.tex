@@ -755,6 +755,133 @@ A minimal DFA for ``contains $110$'' has 4 states tracking the longest suffix th
 \end{center}
 Here $p_3$ is the accepting sink (we have seen $110$).
 
+\subsection{Week 4}
+\subsubsection*{HW4 -- Kleene's Algorithm and Testing Equivalence}
+
+\paragraph{Exercise 1 -- Kleene's Algorithm}
+
+Consider the DFA with states $p$ and $q$, where $p$ is the start and accepting state, and the transitions are:
+\[
+p \xrightarrow{a} p,\quad p \xrightarrow{b} q,\quad q \xrightarrow{a} p,\quad q \xrightarrow{b} q.
+\]
+Let $1=p$ and $2=q$.
+
+For Kleene's algorithm, the base regular expressions are:
+\[
+R_{11}^{(0)}=\varepsilon + a,\qquad
+R_{12}^{(0)}=b,\qquad
+R_{21}^{(0)}=a,\qquad
+R_{22}^{(0)}=\varepsilon + b.
+\]
+
+Using the recurrence
+\[
+R_{ij}^{(k)} = R_{ij}^{(k-1)} + R_{ik}^{(k-1)}\left(R_{kk}^{(k-1)}\right)^*R_{kj}^{(k-1)},
+\]
+we compute the next stage:
+
+\[
+R_{11}^{(1)} = a^*
+\]
+\[
+R_{12}^{(1)} = a^*b
+\]
+\[
+R_{21}^{(1)} = aa^*
+\]
+\[
+R_{22}^{(1)} = \varepsilon + a^*b
+\]
+
+Then
+\[
+R_{11}^{(2)} = R_{11}^{(1)} + R_{12}^{(1)}\left(R_{22}^{(1)}\right)^*R_{21}^{(1)}.
+\]
+
+A simpler equivalent regular expression for the language is:
+\[
+R = \varepsilon + (a+b)^*a.
+\]
+
+Thus, the language accepted by the DFA is:
+\[
+L(A)=L(R)=\{\varepsilon\}\cup\{w\in\{a,b\}^* : w \text{ ends in } a\}.
+\]
+
+\paragraph{Exercise 2 -- Testing Equivalence of Regular Languages}
+
+We apply the table-filling algorithm to the two DFAs in ITALC Exercise 4.4.2.
+
+The first DFA has states $A,B$, where $A$ is accepting and $B$ is non-accepting.  
+The second DFA has states $C,D,E$, where $C$ and $D$ are accepting and $E$ is non-accepting.
+
+The accepting states are:
+\[
+A,\ C,\ D
+\]
+and the non-accepting states are:
+\[
+B,\ E.
+\]
+
+First, we mark all pairs where one state is accepting and the other is not:
+\[
+(A,B),\ (A,E),\ (C,B),\ (C,E),\ (D,B),\ (D,E).
+\]
+
+The remaining pairs are:
+\[
+(A,C),\ (A,D),\ (B,E),\ (C,D).
+\]
+
+Now we check transitions:
+
+\begin{itemize}
+    \item $(A,C)$:
+    \[
+    \delta(A,0)=A,\ \delta(C,0)=D \Rightarrow (A,D),
+    \qquad
+    \delta(A,1)=B,\ \delta(C,1)=E \Rightarrow (B,E)
+    \]
+    Neither resulting pair is marked, so $(A,C)$ remains unmarked.
+
+    \item $(A,D)$:
+    \[
+    \delta(A,0)=A,\ \delta(D,0)=D \Rightarrow (A,D),
+    \qquad
+    \delta(A,1)=B,\ \delta(D,1)=E \Rightarrow (B,E)
+    \]
+    So $(A,D)$ remains unmarked.
+
+    \item $(B,E)$:
+    \[
+    \delta(B,0)=A,\ \delta(E,0)=C \Rightarrow (A,C),
+    \qquad
+    \delta(B,1)=B,\ \delta(E,1)=E \Rightarrow (B,E)
+    \]
+    So $(B,E)$ remains unmarked.
+
+    \item $(C,D)$:
+    \[
+    \delta(C,0)=D,\ \delta(D,0)=D,
+    \qquad
+    \delta(C,1)=E,\ \delta(D,1)=E
+    \]
+    So $(C,D)$ remains unmarked.
+\end{itemize}
+
+Since the start states $A$ and $C$ are not distinguishable, the two DFAs are equivalent.
+
+Therefore,
+\[
+L_1 = L_2.
+\]
+
+In fact, both DFAs accept all binary strings that are either empty or end in $0$.
+
+\paragraph{Question}
+When applying Kleene's algorithm for the exercise, do we need to explicitly compute every $R_{ij}^{(k)}$ value for all $i,j,k$, or is it sufficient to compute only the expressions necessary to derive the final regular expression describing the language?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
