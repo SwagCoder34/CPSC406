@@ -30,8 +30,7 @@
 \contentsline {paragraph}{2. Smaller DFA accepting the same language.}{10}{section*.31}%
 \contentsline {subsection}{\numberline {2.4}Week 4}{10}{subsection.2.4}%
 \contentsline {paragraph}{Exercise 1 -- Kleene's Algorithm}{10}{section*.33}%
-\contentsline {paragraph}{Exercise 2 -- Testing Equivalence of Regular Languages}{11}{section*.34}%
-\contentsline {paragraph}{Question}{12}{section*.35}%
-\contentsline {section}{\numberline {3}Synthesis}{12}{section.3}%
-\contentsline {section}{\numberline {4}Evidence of Participation}{12}{section.4}%
-\contentsline {section}{\numberline {5}Conclusion}{12}{section.5}%
+\contentsline {paragraph}{Question}{13}{section*.38}%
+\contentsline {section}{\numberline {3}Synthesis}{13}{section.3}%
+\contentsline {section}{\numberline {4}Evidence of Participation}{13}{section.4}%
+\contentsline {section}{\numberline {5}Conclusion}{13}{section.5}%

@@ -1,8 +1,8 @@
-PWD /Users/natecarnnahan/Documents/school/CPSC_406/report
+PWD /Users/natecarnnahan/Documents/school/CPSC406/report
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/natecarnnahan/Documents/school/CPSC_406/report/report.tex
+INPUT /Users/natecarnnahan/Documents/school/CPSC406/report/report.tex
 OUTPUT report.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
