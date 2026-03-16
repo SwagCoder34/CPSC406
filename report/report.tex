@@ -970,6 +970,139 @@ Thus, the minimum-state DFA equivalent to the DFA in Fig.\ 4.15 has \(\boxed{3}\
 \paragraph{Question}
 When applying Kleene's algorithm for the exercise, do we need to explicitly compute every $R_{ij}^{(k)}$ value for all $i,j,k$, or is it sufficient to compute only the expressions necessary to derive the final regular expression describing the language?
 
+\subsection{Week 5}
+
+\subsubsection*{Pumping Lemma Exercises}
+
+We use the pumping lemma to show that each of the following languages is not regular. Recall that the pumping lemma states that if a language $L$ is regular, then there exists a pumping length $p$ such that any string $s \in L$ with $|s| \ge p$ can be written as $s = xyz$ where:
+
+\begin{itemize}
+\item $|xy| \le p$
+\item $|y| > 0$
+\item $xy^iz \in L$ for all $i \ge 0$
+\end{itemize}
+
+We will assume each language is regular and derive a contradiction.
+
+\paragraph{$L_1 = \{a^n b^m \mid n,m \in \mathbb{N}, n > m \ge 0\}$}
+
+Assume $L_1$ is regular and let $p$ be the pumping length.  
+Choose the string:
+
+\[
+s = a^{p+1}b^p
+\]
+
+Clearly $s \in L_1$ because $n=p+1$ and $m=p$ so $n>m$.
+
+By the pumping lemma, $s = xyz$ where $|xy| \le p$ and $|y|>0$. Since the first $p$ characters are all $a$'s, the substring $y$ must consist only of $a$'s.
+
+Let $y = a^k$ where $k>0$.
+
+Now pump down with $i=0$:
+
+\[
+xz = a^{p+1-k}b^p
+\]
+
+Now the number of $a$'s is $p+1-k$ which is $\le p$. This means the number of $a$'s is no longer greater than the number of $b$'s. Therefore $xz \notin L_1$.
+
+This contradicts the pumping lemma, so $L_1$ is not regular.
+
+\paragraph{$L_2 = \{a^{n^2} \mid n \ge 1\}$}
+
+Assume $L_2$ is regular and let $p$ be the pumping length.
+
+Choose the string:
+
+\[
+s = a^{p^2}
+\]
+
+Since $p^2$ is a perfect square, $s \in L_2$.
+
+Because $|xy| \le p$, the substring $y$ consists only of $a$'s. Let $y = a^k$ with $k>0$.
+
+Pump the string with $i=2$:
+
+\[
+xy^2z = a^{p^2 + k}
+\]
+
+However, $p^2 + k$ is not guaranteed to be a perfect square since $1 \le k \le p$. Therefore the pumped string is not of the form $a^{n^2}$.
+
+Thus $xy^2z \notin L_2$, contradicting the pumping lemma. Therefore $L_2$ is not regular.
+
+\paragraph{$L_3 = \{a^p \mid p \text{ is prime}\}$}
+
+Assume $L_3$ is regular and let $p$ be the pumping length.
+
+Choose a prime number $q > p$ and let:
+
+\[
+s = a^q
+\]
+
+Clearly $s \in L_3$.
+
+Again $|xy| \le p$ so $y = a^k$ for some $k>0$.
+
+Pump the string with $i=q+1$:
+
+\[
+xy^{q+1}z = a^{q + qk}
+\]
+
+The exponent becomes:
+
+\[
+q + qk = q(1+k)
+\]
+
+This number is composite since it has factors $q$ and $(1+k)$ with $k \ge 1$. Therefore the pumped string is not prime length.
+
+Thus $xy^{q+1}z \notin L_3$, contradicting the pumping lemma. Therefore $L_3$ is not regular.
+
+\paragraph{$L_4 = \{a^k b^m a^{k+m} \mid k,m \ge 0\}$}
+
+Assume $L_4$ is regular and let $p$ be the pumping length.
+
+Choose:
+
+\[
+s = a^p b^p a^{2p}
+\]
+
+This string belongs to $L_4$ since $k=p$ and $m=p$, so the final block has length $k+m = 2p$.
+
+Because $|xy| \le p$, the substring $y$ lies entirely within the first block of $a$'s.
+
+Let $y = a^j$ where $j>0$.
+
+Pump down with $i=0$:
+
+\[
+xz = a^{p-j} b^p a^{2p}
+\]
+
+Now the first block has $p-j$ $a$'s while the final block still has $2p$ $a$'s. 
+However the language requires the final block to have exactly $k+m$ $a$'s, 
+which should now be:
+
+\[
+(p-j) + p = 2p - j
+\]
+
+But the final block still has $2p$ $a$'s, so the string no longer satisfies the language definition.
+
+Thus $xz \notin L_4$, contradicting the pumping lemma. Therefore $L_4$ is not regular.
+
+\paragraph{Discord Question}
+
+One question I had while studying the pumping lemma is how we choose the correct string $s$ to prove a language is not regular. In many examples the string is chosen very strategically (such as choosing a perfect square, a prime length, or balancing parts of the string). 
+
+Is there a general strategy for selecting the best string $s$, or is it mostly based on recognizing patterns in the language definition?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
