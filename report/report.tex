@@ -74,6 +74,7 @@
 \maketitle
 
 \begin{abstract}
+
 \end{abstract}
 
 \setcounter{tocdepth}{3}
@@ -1103,14 +1104,354 @@ One question I had while studying the pumping lemma is how we choose the correct
 
 Is there a general strategy for selecting the best string $s$, or is it mostly based on recognizing patterns in the language definition?
 
+\subsection{Week 6}
+\subsubsection*{HW6 -- Turing Machines and Decidability}
+
+\paragraph{Exercise A -- Basic Turing Machines}
+
+\subparagraph{1. TM for $L=\{10^n\}$ that returns $10^{n+1}$}
+
+Idea: move to the end of the string and append a $0$.
+
+States: $q_0$ (start), $q_1$, $q_{acc}$
+
+\[
+\begin{array}{c|c|c|c}
+\delta & 1 & 0 & B \\
+\hline
+q_0 & (q_1,1,R) & - & - \\
+q_1 & - & (q_1,0,R) & (q_{acc},0,R)
+\end{array}
+\]
+
+\textbf{Explanation:}
+\begin{itemize}
+    \item Verify first symbol is $1$
+    \item Move right across all $0$'s
+    \item On blank, write $0$ and halt
+\end{itemize}
+
+Example:
+\[
+100 \vdash_M^* 1000
+\]
+
+
+\subparagraph{2. TM for $L=\{10^n\}$ that returns $1$}
+
+Idea: erase all $0$'s after the leading $1$.
+
+States: $q_0, q_1, q_{acc}$
+
+\[
+\begin{array}{c|c|c|c}
+\delta & 1 & 0 & B \\
+\hline
+q_0 & (q_1,1,R) & - & - \\
+q_1 & - & (q_1,B,R) & (q_{acc},B,R)
+\end{array}
+\]
+
+\textbf{Explanation:}
+\begin{itemize}
+    \item Keep the initial $1$
+    \item Replace each $0$ with blank
+    \item Halt at end
+\end{itemize}
+
+Example:
+\[
+1000 \vdash_M^* 1
+\]
+
+
+\subparagraph{3. TM that swaps all $0$'s and $1$'s}
+
+States: $q_0, q_{acc}$
+
+\[
+\begin{array}{c|c|c|c}
+\delta & 0 & 1 & B \\
+\hline
+q_0 & (q_0,1,R) & (q_0,0,R) & (q_{acc},B,R)
+\end{array}
+\]
+
+Example:
+\[
+10110 \vdash_M^* 01001
+\]
+
+
+\paragraph{Exercise B -- More Constructions}
+
+\subparagraph{1. Unary addition: $10^n10^m \rightarrow 10^n10^m10^{n+m}$}
+
+The assignment requires the output to \emph{append} a third block $10^{n+m}$ after the original input, leaving $10^n10^m$ intact.
+
+\textbf{Idea:}
+\begin{itemize}
+    \item Use two passes. In the first pass, scan the input to count the total number of $0$'s (there are $n+m$ of them).
+    \item In practice, a clean single-pass approach is: find the end of the input, append a $1$, then copy all $n+m$ zeros from the input to the end.
+    \item Concretely: seek to the first blank after the last $0$; write $1$; then make repeated passes, each time marking one $0$ in the original string as $X$ and appending one $0$ at the end, until all $0$'s are marked; finally restore the $X$'s to $0$'s.
+\end{itemize}
+
+States: $q_0$ (scan to end), $q_1$ (write separator $1$), $q_2$ (seek leftmost unmarked $0$), $q_3$ (seek end to append $0$), $q_4$ (return left), $q_5$ (restore $X \to 0$), $q_{acc}$
+
+\[
+\begin{array}{c|c|c|c|c|c}
+\delta & 1 & 0 & X & B & \text{(appended) } 0 \\
+\hline
+q_0 & (q_0,1,R) & (q_0,0,R) & - & (q_1,B,L) & - \\
+q_1 & - & (q_1,0,L) & - & - & - \\
+\end{array}
+\]
+
+Because the full construction requires many states and multiple passes, we describe the algorithm at the state level and give the key transitions above; the remaining transitions follow the standard ``mark-and-copy'' pattern used for similar TMs in the notes.
+
+\textbf{Example:}
+\[
+1\underbrace{00}_{n=2}1\underbrace{000}_{m=3}
+\;\vdash_M^*\;
+1\underbrace{00}_{n=2}1\underbrace{000}_{m=3}1\underbrace{00000}_{n+m=5}
+\]
+
+
+\subparagraph{2. Doubling a string: $w \rightarrow ww$}
+
+Idea:
+\begin{itemize}
+    \item Mark symbols ($0 \to X$, $1 \to Y$)
+    \item Copy them to the end
+    \item Restore symbols
+\end{itemize}
+
+Key transitions:
+\[
+\begin{aligned}
+0 &\to (X, R) \\
+1 &\to (Y, R)
+\end{aligned}
+\]
+
+Then:
+\begin{itemize}
+    \item Move to end
+    \item Write corresponding symbol
+    \item Return and restore
+\end{itemize}
+
+(This construction uses multiple passes and states.)
+
+
+\paragraph{Exercise C -- Transition Diagrams}
+
+In transition diagrams for TMs, each arc is labelled $a/b,\,D$ where $a$ is the symbol read, $b$ is the symbol written, and $D\in\{L,R\}$ is the head direction.
+
+\subparagraph{A.1 — Accept $10^n$, return $10^{n+1}$}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
+\node[state,initial]   (q0)  {$q_0$};
+\node[state]           (q1)  [right=of q0] {$q_1$};
+\node[state,accepting] (qa)  [right=of q1] {$q_{acc}$};
+
+\path[->]
+  (q0) edge              node {$1/1,R$}   (q1)
+  (q1) edge [loop above] node {$0/0,R$}   ()
+       edge              node {$B/0,R$}   (qa);
+\end{tikzpicture}
+\end{center}
+
+\subparagraph{A.2 — Accept $10^n$, return $1$}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
+\node[state,initial]   (q0) {$q_0$};
+\node[state]           (q1) [right=of q0] {$q_1$};
+\node[state,accepting] (qa) [right=of q1] {$q_{acc}$};
+
+\path[->]
+  (q0) edge              node {$1/1,R$}   (q1)
+  (q1) edge [loop above] node {$0/B,R$}   ()
+       edge              node {$B/B,R$}   (qa);
+\end{tikzpicture}
+\end{center}
+
+\subparagraph{A.3 — Swap all $0$'s and $1$'s}
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3.5cm,on grid,auto]
+\node[state,initial]   (q0) {$q_0$};
+\node[state,accepting] (qa) [right=of q0] {$q_{acc}$};
+
+\path[->]
+  (q0) edge [loop above] node[align=center] {$0/1,R$\\$1/0,R$} ()
+       edge               node {$B/B,R$} (qa);
+\end{tikzpicture}
+\end{center}
+
+\subparagraph{B.1 — Unary addition (append $10^{n+m}$)}
+
+The diagram below shows the high-level states. States $q_2$--$q_4$ implement the mark-and-copy loop; $q_5$ restores marked symbols.
+
+\begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
+\node[state,initial]   (q0) {$q_0$};
+\node[state]           (q1) [right=of q0] {$q_1$};
+\node[state]           (q2) [right=of q1] {$q_2$};
+\node[state]           (q3) [below=of q2]  {$q_3$};
+\node[state]           (q4) [left=of q3]   {$q_4$};
+\node[state]           (q5) [left=of q4]   {$q_5$};
+\node[state,accepting] (qa) [below=of q5]  {$q_{acc}$};
+
+\path[->]
+  (q0) edge [loop above] node[align=center]{$0/0,R$\\$1/1,R$} ()
+       edge node {$B/B,L$} (q1)
+  (q1) edge node {$0/0,L$} (q2)
+  (q2) edge node {$0/X,R$} (q3)
+       edge [bend right=8] node {$B/B,R$} (q5)
+  (q3) edge [loop below] node[align=center]{$0/0,R$\\$1/1,R$\\$X/X,R$} ()
+       edge node {$B/0,L$} (q4)
+  (q4) edge [loop below] node[align=center]{$0/0,L$\\$1/1,L$\\$X/X,L$} ()
+       edge node {$B/B,R$} (q2)
+  (q5) edge [loop above] node {$X/0,R$} ()
+       edge node {$B/B,R$} (qa);
+\end{tikzpicture}
+\end{center}
+
+
+\paragraph{Exercise D -- TM that accepts but never halts}
+
+Goal: accept strings with at least one $1$, but never halt.
+
+States: $q_0, q_1$. \quad \textbf{Accepting state: $F = \{q_1\}$.} \quad Start state: $q_0$.
+
+\[
+\begin{array}{c|c|c|c}
+\delta & 0 & 1 & B \\
+\hline
+q_0 & (q_0,0,R) & (q_1,1,R) & (q_0,B,R) \\
+q_1 & (q_1,0,R) & (q_1,1,R) & (q_1,B,R)
+\end{array}
+\]
+
+\textbf{Explanation:}
+\begin{itemize}
+    \item If a $1$ is found, move to $q_1$
+    \item Both states loop forever (no halting)
+\end{itemize}
+
+Thus:
+\begin{itemize}
+    \item Strings containing $1$ are accepted (enter $q_1$)
+    \item Machine never halts
+\end{itemize}
+
+
+\paragraph{Exercise E -- Multitape Turing Machines}
+
+\subparagraph{1. Convert $w \rightarrow 0^n1^m$}
+
+2-tape TM:
+
+\begin{itemize}
+    \item Tape 1: input
+    \item Tape 2: output
+\end{itemize}
+
+Algorithm:
+\begin{itemize}
+    \item Scan input
+    \item Write $0$ for each $0$
+    \item Then write $1$ for each $1$
+\end{itemize}
+
+Example:
+\[
+101001 \rightarrow 000111
+\]
+
+
+\subparagraph{2. Unary multiplication: $10^n10^m \rightarrow 10^{nm}$}
+
+Idea:
+\begin{itemize}
+    \item For each $0$ in first block:
+    \begin{itemize}
+        \item Copy second block
+    \end{itemize}
+\end{itemize}
+
+This simulates repeated addition.
+
+
+\paragraph{Exercise 1 -- Decidability}
+
+\begin{enumerate}
+    \item \textbf{True.} Given deciders $M_1$ for $L_1$ and $M_2$ for $L_2$, construct a TM $M$ that on input $w$: runs $M_1$ on $w$; if $M_1$ accepts, accept; otherwise run $M_2$ on $w$ and return its answer. Both $M_1$ and $M_2$ always halt, so $M$ always halts. $M$ accepts $w$ iff $w\in L_1$ or $w\in L_2$, i.e.\ iff $w\in L_1\cup L_2$.
+
+    \item \textbf{True.} Given a decider $M$ for $L$, construct $\overline{M}$ that runs $M$ and swaps accept/reject. Since $M$ always halts, so does $\overline{M}$, and it accepts exactly the strings not in $L$, i.e.\ $\overline{L}$.
+
+    \item \textbf{True.} $\varepsilon\in L^*$ always, so accept immediately on empty input. For a non-empty input $w$, try all $2^{|w|-1}$ ways to partition $w = w_1 w_2 \cdots w_k$ and for each partition run the decider for $L$ on every piece. Accept if some partition has every piece in $L$; reject otherwise. There are finitely many partitions and the decider for $L$ always halts, so this procedure always terminates.
+
+    \item \textbf{True.} Given recognizers $M_1$ for $L_1$ and $M_2$ for $L_2$, construct a TM $M$ that on input $w$ \emph{dovetails} (interleaves) the simulations: run $M_1$ for one step, then $M_2$ for one step, then $M_1$ for two steps, and so on. If either machine ever accepts, $M$ accepts. Since any $w\in L_1\cup L_2$ is accepted by at least one of $M_1, M_2$ in finitely many steps, $M$ will eventually accept it. Hence $L_1\cup L_2$ is r.e.
+
+    \item \textbf{False.} The halting language $\mathit{HALT} = \{(M,w)\mid M \text{ halts on } w\}$ is r.e.\ (simulate $M$ on $w$; accept if it halts) but its complement $\overline{\mathit{HALT}}$ is not r.e.\ This is a standard result: if both $\mathit{HALT}$ and $\overline{\mathit{HALT}}$ were r.e., then $\mathit{HALT}$ would be decidable, contradicting the undecidability of the halting problem.
+
+    \item \textbf{True.} Given a recognizer $M$ for $L$, we build a recognizer for $L^*$. On input $w$, enumerate all partitions of $w$ into non-empty pieces and dovetail the simulation of $M$ on each piece across all partitions simultaneously. Accept as soon as all pieces in some partition are accepted by $M$. Since any $w\in L^*$ has a valid decomposition into words of $L$, each accepted in finite time, the machine will eventually find and confirm that partition.
+\end{enumerate}
+
+
+\paragraph{Exercise 2 -- Classification}
+
+\begin{enumerate}
+    \item $L_1 = \{M \mid M \text{ halts on itself}\}$
+
+    \begin{itemize}
+        \item r.e.: yes
+        \item decidable: no
+        \item co-r.e.: no
+    \end{itemize}
+
+    \item $L_2 = \{(M,w) \mid M \text{ halts on } w\}$
+
+    \begin{itemize}
+        \item r.e.: yes
+        \item decidable: no
+        \item co-r.e.: no
+    \end{itemize}
+
+    \item $L_3 = \{(M,w,k) \mid M \text{ halts in } \le k \text{ steps}\}$
+
+    \begin{itemize}
+        \item decidable: yes
+        \item r.e.: yes
+        \item co-r.e.: yes
+    \end{itemize}
+\end{enumerate}
+
+\paragraph{Discord Question (Week 6)}
+
+\textbf{Question:} Does it ever make practical or theoretical sense to design a TM that
+\emph{accepts without halting}, and if so, why would we prefer this over a TM that halts upon acceptance?
+Is there a class of languages or problems where non-halting acceptance is actually \emph{necessary},
+or can we always convert such a machine into one that halts as soon as it accepts?
+
+
 \section{Synthesis}
+
 
 \section{Evidence of Participation}
 
+
 \section{Conclusion}\label{conclusion}
 
+
 \begin{thebibliography}{99}
-\bibitem[BLA]{bla} Nathan Carnnahan, \href{https://en.wikipedia.org/wiki/LaTeX}{CPSC-406 Report}, Nathan Carnnahan, 2026.
+\bibitem{HMU} John E.\ Hopcroft, Rajeev Motwani, and Jeffrey D.\ Ullman,
+  \textit{Introduction to Automata Theory, Languages, and Computation},
+  3rd ed., Pearson, 2006.
 \end{thebibliography}
 
 \end{document}

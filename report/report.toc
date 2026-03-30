@@ -37,6 +37,26 @@
 \contentsline {paragraph}{$L_3 = \{a^p \mid p \text { is prime}\}$}{14}{section*.42}%
 \contentsline {paragraph}{$L_4 = \{a^k b^m a^{k+m} \mid k,m \ge 0\}$}{15}{section*.43}%
 \contentsline {paragraph}{Discord Question}{15}{section*.44}%
-\contentsline {section}{\numberline {3}Synthesis}{15}{section.3}%
-\contentsline {section}{\numberline {4}Evidence of Participation}{15}{section.4}%
-\contentsline {section}{\numberline {5}Conclusion}{15}{section.5}%
+\contentsline {subsection}{\numberline {2.6}Week 6}{15}{subsection.2.6}%
+\contentsline {paragraph}{Exercise A -- Basic Turing Machines}{15}{section*.46}%
+\contentsline {subparagraph}{1. TM for $L=\{10^n\}$ that returns $10^{n+1}$}{15}{section*.47}%
+\contentsline {subparagraph}{2. TM for $L=\{10^n\}$ that returns $1$}{16}{section*.48}%
+\contentsline {subparagraph}{3. TM that swaps all $0$'s and $1$'s}{16}{section*.49}%
+\contentsline {paragraph}{Exercise B -- More Constructions}{16}{section*.50}%
+\contentsline {subparagraph}{1. Unary addition: $10^n10^m \rightarrow 10^n10^m10^{n+m}$}{16}{section*.51}%
+\contentsline {subparagraph}{2. Doubling a string: $w \rightarrow ww$}{17}{section*.52}%
+\contentsline {paragraph}{Exercise C -- Transition Diagrams}{17}{section*.53}%
+\contentsline {subparagraph}{A.1 — Accept $10^n$, return $10^{n+1}$}{17}{section*.54}%
+\contentsline {subparagraph}{A.2 — Accept $10^n$, return $1$}{17}{section*.55}%
+\contentsline {subparagraph}{A.3 — Swap all $0$'s and $1$'s}{17}{section*.56}%
+\contentsline {subparagraph}{B.1 — Unary addition (append $10^{n+m}$)}{18}{section*.57}%
+\contentsline {paragraph}{Exercise D -- TM that accepts but never halts}{18}{section*.58}%
+\contentsline {paragraph}{Exercise E -- Multitape Turing Machines}{18}{section*.59}%
+\contentsline {subparagraph}{1. Convert $w \rightarrow 0^n1^m$}{18}{section*.60}%
+\contentsline {subparagraph}{2. Unary multiplication: $10^n10^m \rightarrow 10^{nm}$}{19}{section*.61}%
+\contentsline {paragraph}{Exercise 1 -- Decidability}{19}{section*.62}%
+\contentsline {paragraph}{Exercise 2 -- Classification}{19}{section*.63}%
+\contentsline {paragraph}{Discord Question (Week 6)}{20}{section*.64}%
+\contentsline {section}{\numberline {3}Synthesis}{20}{section.3}%
+\contentsline {section}{\numberline {4}Evidence of Participation}{20}{section.4}%
+\contentsline {section}{\numberline {5}Conclusion}{20}{section.5}%
