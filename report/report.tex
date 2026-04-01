@@ -1,32 +1,41 @@
-\documentclass{article}
+\documentclass[11pt, a4paper]{article}
 
-\usepackage{tikz} 
-\usetikzlibrary{automata, positioning, arrows} 
-
-\usepackage{amsthm}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{fullpage}
-\usepackage{color}
-\usepackage{parskip}
+% ── Packages (merged from both files) ────────────────────────────────────────
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta, calc, arrows}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
 \usepackage{hyperref}
-  \hypersetup{
-    colorlinks = true,
-    urlcolor = blue,       % color of external links using \href
-    linkcolor= blue,       % color of internal links 
-    citecolor= blue,       % color of links to bibliography
-    filecolor= blue,        % color of file links
-    }
-    
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
 \usepackage{listings}
-\usepackage[utf8]{inputenc}                                                    
-\usepackage[T1]{fontenc}                                                       
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
+% ── Colours (from lecture guide) ──────────────────────────────────────────────
+\definecolor{accent}{RGB}{70,120,210}
+\definecolor{accentgreen}{RGB}{40,160,100}
+\definecolor{accentorange}{RGB}{210,120,50}
+\definecolor{defbg}{RGB}{240,245,255}
+\definecolor{defborder}{RGB}{70,120,210}
+\definecolor{insightbg}{RGB}{240,252,245}
+\definecolor{insightborder}{RGB}{40,160,100}
+\definecolor{warningbg}{RGB}{255,248,235}
+\definecolor{warningborder}{RGB}{210,150,50}
+
+% ── Colours (from report) ────────────────────────────────────────────────────
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
+% ── Listings style (from report) ─────────────────────────────────────────────
 \lstset{frame=tb,
   language=haskell,
   aboveskip=3mm,
@@ -44,45 +53,1046 @@
   tabsize=3
 }
 
-\newtheoremstyle{theorem}
-  {\topsep}   % ABOVESPACE
-  {\topsep}   % BELOWSPACE
-  {\itshape\/}  % BODYFONT
-  {0pt}       % INDENT (empty value is the same as 0pt)
-  {\bfseries} % HEADFONT
-  {.}         % HEADPUNCT
-  {5pt plus 1pt minus 1pt} % HEADSPACE
-  {}          % CUSTOM-HEAD-SPEC
-\theoremstyle{theorem} 
-   \newtheorem{theorem}{Theorem}[section]
-   \newtheorem{corollary}[theorem]{Corollary}
-   \newtheorem{lemma}[theorem]{Lemma}
-   \newtheorem{proposition}[theorem]{Proposition}
+% ── TikZ automata style (from lecture guide) ─────────────────────────────────
+\tikzset{
+  every state/.style={
+    draw=accent,
+    fill=defbg,
+    thick,
+    minimum size=2em,
+    font=\small\ttfamily
+  },
+  accepting/.style={
+    draw=accentgreen,
+    double,
+    double distance=2pt
+  },
+  every edge/.style={
+    draw,
+    -Stealth,
+    semithick,
+    font=\small\ttfamily,
+    color=gray!70!black
+  },
+  lbl/.style={
+    fill=white,
+    inner sep=1.5pt,
+    font=\small\ttfamily\color{accentorange}
+  }
+}
+
+% Draws a plain start arrow pointing at a node's west anchor
+\newcommand{\startarrow}[1]{%
+  \draw[-Stealth, semithick, gray!70!black]
+    ([xshift=-0.8cm]#1.west) -- (#1.west);%
+}
+
+% ── Theorem / Definition environments (from lecture guide) ───────────────────
+\newmdenv[
+  backgroundcolor=defbg,
+  linecolor=defborder,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=12pt, innerrightmargin=10pt,
+  innertopmargin=8pt,   innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=insightbg,
+  linecolor=insightborder,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=12pt, innerrightmargin=10pt,
+  innertopmargin=8pt,   innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt
+]{insightbox}
+
+\newmdenv[
+  backgroundcolor=warningbg,
+  linecolor=warningborder,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=12pt, innerrightmargin=10pt,
+  innertopmargin=8pt,   innerbottommargin=8pt,
+  skipabove=10pt, skipbelow=10pt
+]{notebox}
+
 \theoremstyle{definition}
-   \newtheorem{definition}[theorem]{Definition}
-   \newtheorem{example}[theorem]{Example}
-\theoremstyle{remark}    
-  \newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{construction}{Construction}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
 
-\title{CPSC-406 Report}
-\author{Nathan Carnnahan  \\ Chapman University}
+% ── Section formatting (from lecture guide) ──────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{accent}}
+  {\thesection.}{0.6em}{}[\vspace{-4pt}\rule{\linewidth}{0.4pt}]
 
-\date{\today} 
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{accent!80!black}}
+  {\thesubsection}{0.5em}{}
 
+% ── Header / Footer ──────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\textcolor{gray}{CPSC-406 Report --- Nathan Carnnahan --- Chapman University}}
+\fancyhead[R]{\small\textcolor{gray}{\thepage}}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  urlcolor=accent,
+  citecolor=accent,
+  filecolor=accent,
+  pdftitle={CPSC-406 Report},
+}
+
+% ── Misc helpers ─────────────────────────────────────────────────────────────
+\newcommand{\dfa}{\mathcal{A}}
+\newcommand{\hatdelta}{\widehat{\delta}}
+
+% ==============================================================================
 \begin{document}
+% ==============================================================================
 
-\maketitle
-
-\begin{abstract}
-
-\end{abstract}
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+  {\Huge\bfseries\color{accent} CPSC-406 Report}\\[0.8em]
+  {\LARGE Automata Theory --- Lecture Review \& Homework}\\[2em]
+  \rule{0.5\linewidth}{1pt}\\[2em]
+  {\large
+    \textbf{Nathan Carnnahan}\\[0.4em]
+    Chapman University\\[2em]
+    \today
+  }\\[2em]
+  \rule{0.5\linewidth}{1pt}\\[2em]
+  {\large
+    \textbf{Topics Covered}\\[0.6em]
+    \begin{tabular}{ll}
+      1.  & Deterministic Finite Automata (DFAs) \\
+      2.  & Formal Languages \\
+      3.  & Language Accepted by a DFA \\
+      4.  & DFA Processing \& Design \\
+      5.  & The Extended Transition Function \\
+      6.  & Product Automata \\
+      7.  & NFAs \& Determinization \\
+      8.  & Regular Expressions \\
+      9.  & Kleene's Algorithm \\
+      10. & DFA Minimization \\
+      11. & The Pumping Lemma \\
+      12. & Turing Machines \& Computability \\
+      13. & The Halting Problem \\
+      14. & Decidability Problems \\
+    \end{tabular}
+  }\\[2em]
+  \rule{0.5\linewidth}{1pt}
+\end{titlepage}
 
 \setcounter{tocdepth}{3}
 \tableofcontents
 \clearpage
-\section{Introduction}\label{intro}
 
+
+% ##############################################################################
+%
+%   PART I --- LECTURE REVIEW
+%
+% ##############################################################################
+
+\clearpage
+% ==============================================================================
+\section{Deterministic Finite Automata}
+% ==============================================================================
+
+A \textbf{Deterministic Finite Automaton} is a machine that reads a string of characters one
+symbol at a time and decides whether to \emph{accept} or \emph{reject} it.  It is called
+\emph{deterministic} because at every step there is exactly one possible next state ---
+no guessing.
+
+\begin{defbox}
+\textbf{Definition (DFA).}  A \emph{deterministic finite automaton}
+$\dfa=(Q,\Sigma,\delta,q_0,F)$ consists of:
+\begin{enumerate}[leftmargin=*, itemsep=2pt]
+  \item A finite set of \emph{states} $Q$
+  \item A finite set of \emph{input symbols} $\Sigma$ (the alphabet)
+  \item A \emph{transition function} $\delta\colon Q\times\Sigma\to Q$
+  \item An \emph{initial state} $q_0\in Q$
+  \item A set of \emph{accepting states} $F\subseteq Q$
+\end{enumerate}
+\end{defbox}
+
+\subsection{Representing a DFA}
+
+A DFA can be described in two equivalent ways:
+\begin{itemize}
+  \item \textbf{Transition diagram} --- a directed graph where nodes are states, edges are
+        labelled with symbols, the start state has an incoming arrow, and accepting states are
+        drawn with double circles.
+  \item \textbf{Transition table} --- rows are states, columns are symbols, each cell gives
+        the next state.  Start state marked $\to$, accepting states with $*$.
+\end{itemize}
+
+\begin{example}
+Consider the DFA with $Q=\{q_0,q_1,q_2\}$, $\Sigma=\{0,1\}$, start state $q_0$,
+$F=\{q_1\}$, and transitions $\delta(q_0,0)=q_2$, $\delta(q_0,1)=q_0$,
+$\delta(q_2,0)=q_2$, $\delta(q_2,1)=q_1$, $\delta(q_1,0)=\delta(q_1,1)=q_1$.
+
+This DFA accepts any binary string containing the substring \texttt{01}.
+
+\bigskip
+\begin{center}
+\begin{tikzpicture}[node distance=2.8cm, on grid, auto]
+  \node[state]                         (q0) {$q_0$};
+  \node[state, right=of q0]            (q2) {$q_2$};
+  \node[state, accepting, right=of q2] (q1) {$q_1$};
+  \startarrow{q0}
+  \path[->]
+    (q0) edge[loop above] node[lbl] {$1$}   (q0)
+    (q0) edge             node[lbl] {$0$}   (q2)
+    (q2) edge[loop above] node[lbl] {$0$}   (q2)
+    (q2) edge             node[lbl] {$1$}   (q1)
+    (q1) edge[loop right] node[lbl] {$0,1$} (q1);
+\end{tikzpicture}
+\end{center}
+
+\bigskip\textbf{Transition table:}
+
+\begin{center}
+\begin{tabular}{c|cc}
+  \toprule
+             & $0$   & $1$   \\
+  \midrule
+  $\to q_0$  & $q_2$ & $q_0$ \\
+  $*\;q_1$   & $q_1$ & $q_1$ \\
+  $q_2$      & $q_2$ & $q_1$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\end{example}
+
+% ==============================================================================
+\section{Formal Languages}
+% ==============================================================================
+
+\begin{defbox}
+\textbf{Key definitions.}
+\begin{itemize}[itemsep=3pt]
+  \item \textbf{Alphabet} $\Sigma$ --- any finite set of symbols, e.g.\ $\{0,1\}$ or
+        $\{a,b\}$.
+  \item \textbf{Word} --- any finite sequence of symbols from $\Sigma$, including the
+        \emph{empty word} $\varepsilon$.
+  \item $\Sigma^*$ --- the set of all possible words:
+        $\{\varepsilon,0,1,00,01,10,11,\ldots\}$
+  \item \textbf{Language} $L$ --- any subset $L\subseteq\Sigma^*$.
+\end{itemize}
+\end{defbox}
+
+\subsection{Word Length}
+
+The \emph{length} of a word is defined inductively:
+\[
+  |w| \;:=\;
+  \begin{cases}
+    0     & \text{if }w=\varepsilon \\
+    |v|+1 & \text{if }w=av,\ a\in\Sigma,\ v\in\Sigma^*
+  \end{cases}
+\]
+The \emph{occurrence count} of symbol $a$ in word $w$ is written $|w|_a$.
+
+\subsection{Example Languages over $\{0,1\}$}
+
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  Language & Description \\
+  \midrule
+  $L_1=\{x01y\mid x,y\in\Sigma^*\}$           & Words containing \texttt{01} as a substring \\
+  $L_2=\{w\mid|w|=2^n\text{ for some }n\}$    & Words whose length is a power of $2$ \\
+  $L_3=\{w\mid|w|_0=|w|_1\}$                  & Words with equal numbers of 0s and 1s \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{insightbox}
+\textbf{Tip.}  Languages can be classified by complexity --- this is the \textbf{Chomsky
+Hierarchy}.  The simplest class, \textbf{regular languages}, are exactly those recognisable
+by DFAs and describable by regular expressions.
+\end{insightbox}
+
+% ==============================================================================
+\section{The Language Accepted by a DFA}
+% ==============================================================================
+
+A DFA processes a word by starting at $q_0$ and following transitions one symbol at a time.
+After reading the last symbol, if the current state is in $F$ the word is \emph{accepted};
+otherwise it is \emph{rejected}.
+
+\begin{defbox}
+\textbf{Definition.}  The \emph{language accepted} by $\dfa$ is:
+\[
+  L(\dfa)\;:=\;
+  \bigl\{w\in\Sigma^*\;\big|\;
+  \text{the run of }w\text{ in }\dfa\text{ ends in some }q\in F\bigr\}
+\]
+\end{defbox}
+
+\begin{example}
+Tracing $w=0010$ through the DFA from Section~2:
+
+\begin{center}
+\begin{tabular}{cccc}
+  \toprule
+  Step & Symbol & Current State & Next State \\
+  \midrule
+  Start & --- & $q_0$ & --- \\
+  1 & $0$ & $q_0$ & $q_2$ \\
+  2 & $0$ & $q_2$ & $q_2$ \\
+  3 & $1$ & $q_2$ & $q_1$ \\
+  4 & $0$ & $q_1$ & $q_1$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Final state $q_1\in F$, so $w=0010$ is \textbf{accepted}.
+\end{example}
+
+% ==============================================================================
+\section{DFA Processing \& Design}
+% ==============================================================================
+
+The central design question: \emph{what information does the machine need to remember in
+order to make the correct accept/reject decision?}  Each state encodes a piece of that memory.
+
+\subsection{Pattern: Words ending with \texttt{ab}}
+
+Track the last one or two characters seen.  States: ``haven't seen useful prefix'',
+``just saw \texttt{a}'', ``just saw \texttt{ab}''.
+
+\begin{center}
+\begin{tikzpicture}[node distance=3cm, on grid, auto]
+  \node[state]                         (s)  {\small start};
+  \node[state, right=of s]             (sa) {\small saw $a$};
+  \node[state, accepting, right=of sa] (sab){\small saw $ab$};
+  \startarrow{s}
+  \path[->]
+    (s)   edge[loop above]                       node[lbl]        {$b$} (s)
+    (s)   edge[bend left=15]                     node[lbl, above] {$a$} (sa)
+    (sa)  edge[loop above]                       node[lbl]        {$a$} (sa)
+    (sa)  edge[bend left=15]                     node[lbl, above] {$b$} (sab)
+    (sab) edge[bend left=15]                     node[lbl, below] {$a$} (sa)
+    (sab) edge[out=210, in=330, looseness=0.45]  node[lbl, below] {$b$} (s);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Pattern: Parity Tracking}
+
+To track whether the counts of $a$'s and $b$'s are odd or even, use four states ---
+one per parity combination.  The accepting state is (odd $a$, odd $b$).
+
+\begin{center}
+\begin{tikzpicture}[node distance=2.8cm, on grid, auto]
+  \node[state]                         (ee) {$E_aE_b$};
+  \node[state, right=of ee]            (oe) {$O_aE_b$};
+  \node[state, below=of ee]            (eo) {$E_aO_b$};
+  \node[state, accepting, right=of eo] (oo) {$O_aO_b$};
+  \startarrow{ee}
+  \path[->]
+    (ee) edge[bend left=12] node[lbl, above] {$a$} (oe)
+    (oe) edge[bend left=12] node[lbl, below] {$a$} (ee)
+    (eo) edge[bend left=12] node[lbl, above] {$a$} (oo)
+    (oo) edge[bend left=12] node[lbl, below] {$a$} (eo)
+    (ee) edge[bend left=12] node[lbl, left]  {$b$} (eo)
+    (eo) edge[bend left=12] node[lbl, right] {$b$} (ee)
+    (oe) edge[bend left=12] node[lbl, left]  {$b$} (oo)
+    (oo) edge[bend left=12] node[lbl, right] {$b$} (oe);
+\end{tikzpicture}
+\end{center}
+
+\begin{insightbox}
+\textbf{Insight.}  Parity-tracking DFAs form a grid.  Each axis tracks one counter's
+parity.  This generalises: to track any finite combination of properties, make one state
+per combination.
+\end{insightbox}
+
+% ==============================================================================
+\section{The Extended Transition Function}
+% ==============================================================================
+
+The standard $\delta$ handles one symbol at a time.  The \textbf{extended transition
+function} $\hatdelta\colon Q\times\Sigma^*\to Q$ generalises this to entire words.
+
+\begin{defbox}
+\textbf{Definition.}  Define $\hatdelta$ inductively:
+\[
+  \hatdelta(q,w)\;:=\;
+  \begin{cases}
+    q & \text{if }w=\varepsilon \\
+    \delta\!\bigl(\hatdelta(q,x),\,a\bigr)
+      & \text{if }w=xa,\ a\in\Sigma,\ x\in\Sigma^*
+  \end{cases}
+\]
+\end{defbox}
+
+This lets us write the accepted language as
+$L(\dfa)=\{w\in\Sigma^*\mid\hatdelta(q_0,w)\in F\}$.
+
+\begin{example}
+For a DFA with states $\{1,2,3\}$, $\Sigma=\{a,b\}$, start state~$1$, $F=\{3\}$,
+computing $\hatdelta(1,baba)$:
+
+\begin{center}
+\begin{tabular}{cll}
+  \toprule
+  Step & Computation & Result \\
+  \midrule
+  1 & $\hatdelta(1,\varepsilon)$                             & $1$ \\
+  2 & $\delta(\hatdelta(1,\varepsilon),b)=\delta(1,b)$       & $1$ \\
+  3 & $\delta(\hatdelta(1,b),a)=\delta(1,a)$                 & $2$ \\
+  4 & $\delta(\hatdelta(1,ba),b)=\delta(2,b)$                & $3$ \\
+  5 & $\delta(\hatdelta(1,bab),a)=\delta(3,a)$               & $3\in F$\;\checkmark \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Word $baba$ is \textbf{accepted}.
+\end{example}
+
+% ==============================================================================
+\section{Product Automata}
+% ==============================================================================
+
+Given two DFAs $\dfa^{(1)}$ and $\dfa^{(2)}$, we can build a single DFA for their
+\emph{intersection} or \emph{union} by running both simultaneously.
+
+\begin{defbox}
+\textbf{Definition (Product Automaton).}
+For DFAs $\dfa^{(1)}=(Q^{(1)},\Sigma,\delta^{(1)},q_0^{(1)},F^{(1)})$ and
+$\dfa^{(2)}=(Q^{(2)},\Sigma,\delta^{(2)},q_0^{(2)},F^{(2)})$,
+define $\dfa=(Q,\Sigma,\delta,q_0,F)$ by:
+\begin{align*}
+  Q &:= Q^{(1)}\times Q^{(2)} \\
+  \delta\bigl((p,q),a\bigr) &:= \bigl(\delta^{(1)}(p,a),\;\delta^{(2)}(q,a)\bigr) \\
+  q_0 &:= (q_0^{(1)},q_0^{(2)})
+\end{align*}
+The choice of $F$ determines the operation:
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  Operation & Accepting states $F$ \\
+  \midrule
+  Intersection $\cap$ & $F^{(1)}\times F^{(2)}$ \\
+  Union $\cup$        & $(F^{(1)}\times Q^{(2)})\cup(Q^{(1)}\times F^{(2)})$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\end{defbox}
+
+\subsection{Complement}
+
+To build a DFA for $\overline{L(\dfa)}=\Sigma^*\setminus L(\dfa)$, simply \textbf{swap
+accepting and non-accepting states} --- everything else stays the same.
+
+\begin{insightbox}
+\textbf{Tip.}  When building a product automaton, start from $(q_0^{(1)},q_0^{(2)})$ and
+only trace reachable pairs --- unreachable states can be ignored.
+\end{insightbox}
+
+% ==============================================================================
+\section{NFAs \& Determinization}
+% ==============================================================================
+
+\begin{defbox}
+\textbf{Definition (NFA).}  A \emph{nondeterministic finite automaton} has the same 5-tuple
+as a DFA, except the transition function maps to the \emph{power set}:
+\[
+  \delta\colon Q\times\Sigma\to\mathcal{P}(Q)
+\]
+A word is accepted if \emph{at least one} path through the NFA ends in an accepting state.
+\end{defbox}
+
+\begin{example}
+The NFA below accepts strings that end in \texttt{ab}.  From state~1, reading \texttt{a}
+nondeterministically leads to $\{1\}$ or $\{1,2\}$.
+
+\begin{center}
+\begin{tikzpicture}[node distance=2.8cm, on grid, auto]
+  \node[state]                        (1) {$1$};
+  \node[state, right=of 1]            (2) {$2$};
+  \node[state, accepting, right=of 2] (3) {$3$};
+  \startarrow{1}
+  \path[->]
+    (1) edge[loop above] node[lbl] {$a,b$} (1)
+    (1) edge             node[lbl] {$a$}   (2)
+    (2) edge             node[lbl] {$b$}   (3);
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+\subsection{The Power Set Construction}
+
+Every NFA can be converted to an equivalent DFA.  The states of the new DFA are
+\emph{subsets} of the NFA's states.
+
+\begin{defbox}
+\textbf{Construction (Power Set Automaton).}
+Given NFA $\dfa=(Q,\Sigma,\delta,q_0,F)$, define
+$\dfa^D=(Q^D,\Sigma,\delta^D,q_0^D,F^D)$ by:
+\begin{align*}
+  Q^D           &:= \mathcal{P}(Q) \\
+  \delta^D(S,a) &:= \bigcup_{q\in S}\,\delta(q,a) \\
+  q_0^D         &:= \{q_0\} \\
+  F^D           &:= \{S\subseteq Q\mid S\cap F\neq\emptyset\}
+\end{align*}
+\end{defbox}
+
+\begin{example}
+NFA: $Q=\{1,2,3\}$, $\Sigma=\{a,b\}$, $q_0=1$, $F=\{3\}$, with $\delta(1,a)=\{1,2\}$,
+$\delta(1,b)=\{1\}$, $\delta(2,b)=\{3\}$, all others $=\emptyset$.
+
+\begin{center}
+\begin{tabular}{cccc}
+  \toprule
+  State         & $a$       & $b$       & Accepting? \\
+  \midrule
+  $\to\{1\}$    & $\{1,2\}$ & $\{1\}$   & No \\
+  $\{1,2\}$     & $\{1,2\}$ & $\{1,3\}$ & No \\
+  $*\;\{1,3\}$  & $\{1,2\}$ & $\{1\}$   & Yes ($3\in F$) \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\bigskip
+\begin{center}
+\begin{tikzpicture}[node distance=3cm, on grid, auto]
+  \node[state]                        (A) {$\{1\}$};
+  \node[state, right=of A]            (B) {$\{1,2\}$};
+  \node[state, accepting, right=of B] (C) {$\{1,3\}$};
+  \startarrow{A}
+  \path[->]
+    (A) edge[loop above]                     node[lbl]        {$b$} (A)
+    (A) edge[bend left=15]                   node[lbl, above] {$a$} (B)
+    (B) edge[loop above]                     node[lbl]        {$a$} (B)
+    (B) edge[bend left=15]                   node[lbl, above] {$b$} (C)
+    (C) edge[bend left=15]                   node[lbl, below] {$a$} (B)
+    (C) edge[out=210, in=330, looseness=0.45] node[lbl, below] {$b$} (A);
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+\begin{insightbox}
+\textbf{Key fact.}  In principle $|Q^D|=2^{|Q|}$, but most subsets are unreachable in
+practice.  Always build the table incrementally starting from $\{q_0\}$.
+\end{insightbox}
+
+% ==============================================================================
+\section{Regular Expressions}
+% ==============================================================================
+
+Regular expressions are a concise algebraic way to \emph{describe} regular languages.
+
+\subsection{Operations on Languages}
+
+\begin{defbox}
+Three fundamental operations:
+\begin{itemize}[itemsep=4pt]
+  \item \textbf{Union:} $L\cup M=\{x\mid x\in L\text{ or }x\in M\}$
+  \item \textbf{Concatenation:} $LM=\{vw\mid v\in L,\;w\in M\}$
+  \item \textbf{Kleene star:} $L^*=\bigcup_{i=0}^{\infty}L^i$, where
+        $L^0=\{\varepsilon\}$ and $L^{i+1}=L^i\cdot L$
+\end{itemize}
+\end{defbox}
+
+\subsection{Syntax and Semantics}
+
+Regular expressions are built inductively.
+
+\textbf{Base cases:}
+\begin{itemize}
+  \item $\emptyset$: the empty language; $L(\emptyset)=\emptyset$
+  \item $\varepsilon$: the language $\{\varepsilon\}$
+  \item $\mathbf{a}$ for any $a\in\Sigma$: the language $\{a\}$
+\end{itemize}
+
+\textbf{Step cases:}
+\begin{itemize}
+  \item \textbf{Sum} $E+F$: $L(E+F)=L(E)\cup L(F)$
+  \item \textbf{Concatenation} $EF$: $L(EF)=L(E)\,L(F)$
+  \item \textbf{Kleene star} $E^*$: $L(E^*)=L(E)^*$
+\end{itemize}
+
+\textbf{Operator precedence} (high to low): ${}^*\succ{\cdot}\succ{+}$.
+
+So $01^*+1=\bigl((0\cdot(1^*))+1\bigr)$.
+
+\subsection{Equivalence with DFAs and NFAs}
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  From  & To    & Method \\
+  \midrule
+  Regex & NFA   & Structural induction on the expression \\
+  NFA   & DFA   & Power set construction \\
+  DFA   & Regex & Kleene's algorithm (Section~10) \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ==============================================================================
+\section{Kleene's Algorithm}
+% ==============================================================================
+
+Given a DFA $\dfa$ with states renamed $Q=\{1,\ldots,n\}$, Kleene's algorithm produces a
+regular expression $R_\dfa$ with $L(\dfa)=L(R_\dfa)$.
+
+\begin{defbox}
+\textbf{The key objects.}  For $0\leq k\leq n$ and $1\leq i,j\leq n$, let $R^{(k)}_{ij}$
+be the regular expression describing all paths from state $i$ to state $j$ whose
+\emph{intermediate} states are all numbered $\leq k$.
+
+\medskip
+\textbf{Base case ($k=0$):}  Only direct transitions allowed.
+\[
+  L^{(0)}_{ij}=
+  \begin{cases}
+    \{a\in\Sigma\mid\delta(i,a)=j\}
+        & \text{if }i\neq j \\
+    \{\varepsilon\}\cup\{a\in\Sigma\mid\delta(i,a)=j\}
+        & \text{if }i=j
+  \end{cases}
+\]
+
+\textbf{Inductive step ($k-1\mapsto k$):}
+\[
+  R^{(k)}_{ij}
+  \;=\;
+  \underbrace{R^{(k-1)}_{ij}}_{\text{avoid }k}
+  \;+\;
+  \underbrace{R^{(k-1)}_{ik}}_{\text{reach }k}
+  \underbrace{\bigl(R^{(k-1)}_{kk}\bigr)^*}_{\text{loop at }k}
+  \underbrace{R^{(k-1)}_{kj}}_{\text{leave }k}
+\]
+
+\textbf{Final result:}
+\[
+  R_\dfa\;=\;\sum_{q\in F}R^{(n)}_{q_0 q}
+\]
+\end{defbox}
+
+\begin{insightbox}
+\textbf{Note.}  This algorithm is correct but expensive: for $n$ states we compute
+$O(n^3)$ expressions, each potentially of exponential length.  A more practical alternative
+is the \textbf{state elimination method}.
+\end{insightbox}
+
+% ==============================================================================
+\section{DFA Minimization}
+% ==============================================================================
+
+Given a DFA, find the equivalent DFA with the \textbf{fewest states} by merging states that
+are indistinguishable.
+
+\begin{defbox}
+\textbf{Definition (State Equivalence).}  States $p,q\in Q$ are \emph{equivalent},
+written $p\sim q$, if:
+\[
+  \forall w\in\Sigma^*\colon
+  \hatdelta(p,w)\in F\iff\hatdelta(q,w)\in F
+\]
+That is, no string can distinguish $p$ from $q$.
+\end{defbox}
+
+\subsection{The Table-Filling Method}
+
+\begin{enumerate}[itemsep=4pt]
+  \item Mark all pairs $(p,q)$ where one is accepting and the other is not.
+  \item For each unmarked pair $(p,q)$ and each $a\in\Sigma$: if
+        $(\delta(p,a),\delta(q,a))$ is already marked, mark $(p,q)$ too.
+  \item Repeat step~2 until no new pairs get marked.  Unmarked pairs are equivalent.
+  \item Merge each equivalence class $[q]_\sim$ into a single state.  Remove
+        unreachable states.
+\end{enumerate}
+
+\begin{defbox}
+\textbf{Construction (Minimised DFA).}
+Define $\dfa^{\min}=(Q^{\min},\Sigma,\delta^{\min},q_0^{\min},F^{\min})$ by:
+\begin{align*}
+  Q^{\min}             &:=\{[q]_{\sim}\mid q\in Q\} \\
+  \delta^{\min}([q],a) &:=[\delta(q,a)] \\
+  q_0^{\min}           &:=[q_0] \\
+  F^{\min}             &:=\{[q]\mid q\in F\}
+\end{align*}
+\end{defbox}
+
+\begin{theorem}
+Let $\dfa$ be a DFA with all states reachable.  Then $\dfa^{\min}$ is the (essentially
+unique) DFA with the same language and the minimal number of states.
+\end{theorem}
+
+% ==============================================================================
+\section{The Pumping Lemma}
+% ==============================================================================
+
+Not every language is regular.  The Pumping Lemma lets us \emph{prove} a language is
+\textbf{not} regular.
+
+\begin{defbox}
+\textbf{Theorem (Pumping Lemma).}  Let $L$ be a regular language.  Then there exists a
+constant $n>0$ such that for every $w\in L$ with $|w|\geq n$, $w$ decomposes as $w=xyz$
+satisfying:
+\begin{enumerate}
+  \item $y\neq\varepsilon$
+  \item $|xy|\leq n$
+  \item $\forall k\geq 0\colon xy^kz\in L$
+\end{enumerate}
+\end{defbox}
+
+\subsection{Why It Is True}
+
+If $L=L(\dfa)$ for a DFA with $n$ states, any accepted word of length $\geq n$ forces $n+1$
+states to be visited.  By the \textbf{Pigeonhole Principle} some state $p_i=p_j$ is visited
+twice within the first $n+1$ steps.  The substring $y=a_{i+1}\cdots a_j$ forms a loop that
+can be repeated (or skipped) any number of times.
+
+\subsection{Proof Template}
+
+\begin{enumerate}[itemsep=3pt]
+  \item \textbf{Assume} $L$ is regular for contradiction.  So $L$ has some pumping
+        number~$n$.
+  \item \textbf{Choose} a specific $w\in L$ with $|w|\geq n$ designed to force a
+        contradiction.
+  \item \textbf{Consider} all decompositions $w=xyz$ satisfying conditions~1 and~2.
+  \item \textbf{Show} that for each split, some $xy^kz\notin L$, contradicting
+        condition~3.
+  \item \textbf{Conclude} $L$ is not regular.
+\end{enumerate}
+
+\begin{example}
+Show that $L=\{a^nb^n\mid n\geq 0\}$ is not regular.
+
+\begin{proof}
+Assume $L$ is regular with pumping number $n$.  Choose $w=a^nb^n$ (so $|w|=2n\geq n$).
+By condition~2, $xy\subseteq a^n$, so $y$ consists only of $a$'s.  By condition~1,
+$|y|\geq 1$.  Pumping with $k=2$ gives $w'=xy^2z$, which has strictly more $a$'s than
+$b$'s, so $w'\notin L$.  This contradicts condition~3.  Therefore $L$ is not regular.
+\end{proof}
+\end{example}
+
+\begin{notebox}
+\textbf{Important.}  The Pumping Lemma can only \emph{disprove} regularity.  Satisfying the
+pumping conditions does not prove a language is regular --- for that you need to construct
+a DFA or regular expression.
+\end{notebox}
+
+% ==============================================================================
+\section{Turing Machines \& Computability}
+% ==============================================================================
+
+DFAs cannot count arbitrarily or perform arithmetic.  Turing machines extend the model with
+an infinite read/write tape.
+
+\subsection{Why DFAs Are Insufficient}
+
+Consider the language $L=\{10^n10^m10^{n+m}\mid n,m\in\mathbb{N}\}$, which encodes
+addition.  This language is not regular (provable via the Pumping Lemma), so DFAs cannot
+perform even basic arithmetic.  The core limitation: a DFA has \emph{finite} memory (finitely
+many states), so it cannot store arbitrarily large numbers.
+
+What is missing?  \textbf{Read/write memory.}  A Turing machine adds an infinite tape that
+the machine can both read from and write to, and a head that moves in both directions.  This
+gives it the power to compute anything that is algorithmically computable.
+
+\subsection{Definition}
+
+\begin{defbox}
+\textbf{Definition (Turing Machine).}  A TM is a 7-tuple
+$M=(Q,\Sigma,\Gamma,\delta,q_0,B,F)$ where:
+\begin{itemize}[itemsep=2pt]
+  \item $Q$ --- finite set of states
+  \item $\Sigma$ --- input alphabet
+  \item $\Gamma$ --- tape alphabet, $\Sigma\subseteq\Gamma$
+  \item $\delta(q,X)=(p,Y,D)$ --- in state $q$ reading $X$: go to $p$, write $Y$,
+        move $D\in\{L,R\}$
+  \item $q_0$ --- start state
+  \item $B\in\Gamma\setminus\Sigma$ --- blank symbol
+  \item $F\subseteq Q$ --- accepting states
+\end{itemize}
+\end{defbox}
+
+\begin{theorem}
+Every DFA can be regarded as a TM.  If $\delta(p,X)=q$ in the DFA, define
+$\delta(p,X)=(q,X,R)$ in the TM.  When the TM reads the first blank, it halts.
+\end{theorem}
+
+\subsection{Example TM: Accepting $\{0^n1^n\}$}
+
+Strategy: match each $0$ to a $1$ by marking them $X$ and $Y$ respectively.
+
+\begin{center}
+\begin{tabular}{cccccc}
+  \toprule
+  $\delta$ & $0$ & $1$ & $X$ & $Y$ & $B$ \\
+  \midrule
+  $q_0$ & $(q_1,X,R)$ & ---         & ---         & $(q_3,Y,R)$ & ---         \\
+  $q_1$ & $(q_1,0,R)$ & $(q_2,Y,L)$ & ---         & $(q_1,Y,R)$ & ---         \\
+  $q_2$ & ---         & ---         & $(q_0,X,R)$ & $(q_2,Y,L)$ & ---         \\
+  $q_3$ & ---         & ---         & ---         & $(q_3,Y,R)$ & $(q_4,B,R)$ \\
+  $q_4$ & \multicolumn{5}{c}{(accepting --- halt)} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Instantaneous Descriptions}
+
+A configuration of a TM is written as an \textbf{ID}: tape contents with the current state
+to the left of the scanned symbol.
+\[
+  q_0\,0011\;\vdash\;Xq_1\,011\;\vdash\;X0q_1\,11
+  \;\vdash\;Xq_2\,0Y1\;\vdash\;\cdots
+\]
+
+\subsection{Computability Hierarchy}
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Class & Definition & Example \\
+  \midrule
+  Regular              & Accepted by a DFA            & $\{w\mid w\text{ contains }01\}$ \\
+  Recursively Enum.    & Accepted by some TM           & $\{0^n1^n\mid n\geq 0\}$ \\
+  Recursive (Decidable)& TM that always halts          & Most computable problems \\
+  Undecidable          & No TM can decide it           & The Halting Problem \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{insightbox}
+\textbf{Key takeaway.}  Regular $\subset$ Recursive (Decidable) $\subset$ RE $\subset$
+All Languages.  DFAs sit at the bottom; Turing machines reach RE\@.  But even TMs
+cannot decide everything --- the Halting Problem (next section) is the most famous example.
+\end{insightbox}
+
+% ==============================================================================
+\section{The Halting Problem}
+% ==============================================================================
+
+The Halting Problem asks: given a program $P$ and an input $I$, does $P$ eventually
+terminate on $I$?  We want to know whether a universal ``halt-checker'' can exist.
+
+\begin{defbox}
+\textbf{The Halting Problem --- Specification.}
+Does there exist a program $H$ such that:
+\begin{enumerate}[itemsep=2pt]
+  \item $H$ takes as input a program $P$ and an input $I$
+  \item $H$ always terminates (it never loops forever)
+  \item $H(P,I)=\texttt{true}$ if $P$ terminates on $I$
+  \item $H(P,I)=\texttt{false}$ if $P$ does not terminate on $I$
+\end{enumerate}
+\end{defbox}
+
+\begin{theorem}
+The Halting Problem is undecidable.  No program $H$ satisfying all four properties above
+can exist.
+\end{theorem}
+
+\begin{proof}
+By contradiction.
+
+\textbf{Step 1.}  Assume a program $H$ with all four properties exists.
+
+\textbf{Step 2.}  Define a new ``strange'' program $S$ as follows:
+\[
+  S(X)\;:=\;
+  \begin{cases}
+    \text{loop forever} & \text{if }H(X,X)=\texttt{true} \\
+    \text{halt}         & \text{if }H(X,X)=\texttt{false}
+  \end{cases}
+\]
+In pseudo-code: \texttt{if H(X,X) then while true do skip}.
+
+Note: since $H$ exists and always terminates, the definition of $S$ is well-formed.
+
+\textbf{Step 3.}  Ask: what happens when we run $S(S)$?  We derive a chain of equivalences:
+\begin{align*}
+  H(S,S)=\texttt{true}
+  &\iff S(S)\text{ terminates}  &&\text{(by definition of }H\text{)} \\
+  &\iff H(S,S)=\texttt{false}  &&\text{(by definition of }S\text{)}
+\end{align*}
+
+This is a contradiction: $H(S,S)$ can be neither \texttt{true} nor \texttt{false}.
+
+\textbf{Step 4.}  Therefore our assumption that $H$ exists is wrong.
+\end{proof}
+
+\subsection{Intuition --- Why Self-Reference Breaks Things}
+
+The key trick is \textbf{diagonalisation} --- we feed the program to itself as input ($S$
+applied to $S$).  This creates a self-referential paradox akin to ``this sentence is false.''
+Any purported halt-checker $H$ can be weaponised against itself by constructing a program
+that does the \emph{opposite} of what $H$ predicts.
+
+\begin{notebox}
+\textbf{Historical note.}  Turing (1937) introduced Turing machines precisely to formalise
+the notion of ``program'' and prove this result.  The diagonalisation technique mirrors
+Cantor's proof that the reals are uncountable.
+\end{notebox}
+
+% ==============================================================================
+\section{Decidability Problems}
+% ==============================================================================
+
+A natural follow-up: which \emph{specific} questions about automata and Turing machines are
+decidable or undecidable?  The answers differ dramatically depending on the model.
+
+\subsection{Decidable Problems for DFAs}
+
+Because DFAs have finite state spaces, many questions about them can be answered
+algorithmically:
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Problem      & Question          & Method \\
+  \midrule
+  Emptiness    & $L(\dfa)=\emptyset$?
+               & Reachability: is any $q\in F$ reachable from $q_0$? \\
+  Finiteness   & $|L(\dfa)|<\infty$?
+               & Check for cycles on paths from $q_0$ to $F$ \\
+  Membership   & $w\in L(\dfa)$?
+               & Simulate $\dfa$ on $w$ --- $O(|w|)$ time \\
+  Equivalence  & $L(\dfa_1)=L(\dfa_2)$?
+               & Minimise both and check isomorphism \\
+  Universality & $L(\dfa)=\Sigma^*$?
+               & Complement $\dfa$ and test emptiness \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{insightbox}
+All of the above are decidable because DFAs have a \textbf{finite} number of states --- we
+can exhaustively explore the entire state space.
+\end{insightbox}
+
+\subsection{Undecidable Problems for Turing Machines}
+
+For Turing machines, almost every non-trivial question becomes undecidable.  These can be
+shown undecidable by \textbf{reduction} from the Halting Problem.
+
+\begin{center}
+\begin{tabular}{llc}
+  \toprule
+  Problem     & Question                         & Decidable? \\
+  \midrule
+  Halting     & Does TM $M$ halt on input $w$?   & \textcolor{red}{No} \\
+  Emptiness   & $L(M)=\emptyset$?                & \textcolor{red}{No} \\
+  Equivalence & $L(M_1)=L(M_2)$?                 & \textcolor{red}{No} \\
+  Regularity  & Is $L(M)$ regular?               & \textcolor{red}{No} \\
+  Membership  & $w\in L(M)$?  (in general)       & \textcolor{red}{No} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The Sharp Contrast}
+
+\begin{defbox}
+\textbf{Key Insight.}  The \emph{same question} can be decidable for DFAs but undecidable
+for TMs.  The difference: DFAs have \textbf{bounded} computation (finite states, one pass, no
+writing), while TMs have \textbf{unbounded} computation (infinite tape, arbitrary rewinding).
+The power that makes TMs universal also makes them unpredictable.
+\end{defbox}
+
+\subsection{Rice's Theorem (Conceptual)}
+
+Any \emph{non-trivial} property of the language recognised by a Turing machine is
+undecidable.  A property is ``non-trivial'' if some TMs have it and some do not.  This means
+questions like ``does this TM accept at least one string?'' or ``is the language of this TM
+finite?'' are all undecidable.
+
+\begin{notebox}
+\textbf{For the midterm.}  Remember the sharp contrast --- decidable for DFAs, undecidable
+for TMs.  The halting problem proof by contradiction (assume $H$ exists $\to$ build strange
+program $S$ $\to$ derive $S(S)$ paradox) is the key proof technique.
+\end{notebox}
+
+% ==============================================================================
+\newpage
+\section*{Quick Reference Summary}
+\addcontentsline{toc}{section}{Quick Reference Summary}
+% ==============================================================================
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\bfseries}p{4cm} p{9.5cm}}
+  \toprule
+  Concept & Key Idea \\
+  \midrule
+  DFA &
+    5-tuple $(Q,\Sigma,\delta,q_0,F)$.  Reads input, follows unique transitions,
+    accepts iff final state $\in F$. \\
+  Extended $\hatdelta$ &
+    $\hatdelta(q,\varepsilon)=q$;\;
+    $\hatdelta(q,xa)=\delta(\hatdelta(q,x),a)$.
+    Applies transitions to an entire word. \\
+  Product automaton &
+    States are pairs.  Intersection: $F=F^{(1)}\times F^{(2)}$.
+    Union: accept if either component accepts.
+    Complement: swap $F$ and $Q\setminus F$. \\
+  NFA &
+    Like DFA but $\delta:Q\times\Sigma\to\mathcal{P}(Q)$.
+    Accepts if any path ends in $F$.  Equally powerful to DFAs. \\
+  Power set construction &
+    NFA$\to$DFA.  States are subsets.  Build from $\{q_0\}$.
+    Up to $2^n$ states (often fewer reachable). \\
+  Regular expressions &
+    Built from $\emptyset,\varepsilon$, symbols using $+$, $\cdot$, ${}^*$.
+    Equivalent in power to DFAs and NFAs. \\
+  Kleene's algorithm &
+    DFA$\to$regex.  Build $R^{(k)}_{ij}$ inductively.
+    Final expression sums over accepting states. \\
+  DFA minimisation &
+    Merge equivalent states ($p\sim q$ if no suffix distinguishes them).
+    Table-filling finds all equivalent pairs. \\
+  Pumping Lemma &
+    Regular $L\Rightarrow\exists n$ s.t.\ long words pump.
+    Used only to prove non-regularity via contradiction. \\
+  Turing machines &
+    7-tuple.  Infinite tape with R/W head.
+    Extends DFAs.  Models all algorithmic computation. \\
+  Decidability &
+    Decidable $=$ TM that always halts.
+    Undecidable $=$ no such TM exists. \\
+  Halting problem &
+    Undecidable.  Proof: assume halt-checker $H$ exists, build $S(X)$: loop if $H(X,X)$
+    is true, halt otherwise.  $S(S)$ creates contradiction, so $H$ cannot exist. \\
+  DFA decidability &
+    Emptiness, finiteness, membership, equivalence, universality --- all decidable
+    via graph search or complement $+$ emptiness. \\
+  TM undecidability &
+    Halting, emptiness, equivalence, regularity --- all undecidable.  Rice's theorem:
+    any non-trivial language property of a TM is undecidable. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ##############################################################################
+%
+%   PART II --- HOMEWORK ASSIGNMENTS
+%
+% ##############################################################################
+
+\clearpage
+% ==============================================================================
 \section{Week by Week}\label{homework}
+% ==============================================================================
 
 \subsection{Week 1}
 \subsubsection*{HW1 -- DFA Exercises}
@@ -229,7 +1239,7 @@ Equivalent to forbidding substring $bbb$.
 
 \begin{itemize}
 \item Problems 3 and 4 use the same parity structure; only the accepting state changes.
-\item Problems 5 and 6 use the same “count consecutive $b$'s” structure; one treats reaching three $b$'s as rejection, the other as acceptance.
+\item Problems 5 and 6 use the same "count consecutive $b$'s" structure; one treats reaching three $b$'s as rejection, the other as acceptance.
 \item Problems 1 and 2 track progress toward matching a pattern.
 \end{itemize}
 
@@ -1248,7 +2258,7 @@ Then:
 
 In transition diagrams for TMs, each arc is labelled $a/b,\,D$ where $a$ is the symbol read, $b$ is the symbol written, and $D\in\{L,R\}$ is the head direction.
 
-\subparagraph{A.1 — Accept $10^n$, return $10^{n+1}$}
+\subparagraph{A.1 --- Accept $10^n$, return $10^{n+1}$}
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
@@ -1263,7 +2273,7 @@ In transition diagrams for TMs, each arc is labelled $a/b,\,D$ where $a$ is the 
 \end{tikzpicture}
 \end{center}
 
-\subparagraph{A.2 — Accept $10^n$, return $1$}
+\subparagraph{A.2 --- Accept $10^n$, return $1$}
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
@@ -1278,7 +2288,7 @@ In transition diagrams for TMs, each arc is labelled $a/b,\,D$ where $a$ is the 
 \end{tikzpicture}
 \end{center}
 
-\subparagraph{A.3 — Swap all $0$'s and $1$'s}
+\subparagraph{A.3 --- Swap all $0$'s and $1$'s}
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,node distance=3.5cm,on grid,auto]
@@ -1291,7 +2301,7 @@ In transition diagrams for TMs, each arc is labelled $a/b,\,D$ where $a$ is the 
 \end{tikzpicture}
 \end{center}
 
-\subparagraph{B.1 — Unary addition (append $10^{n+m}$)}
+\subparagraph{B.1 --- Unary addition (append $10^{n+m}$)}
 
 The diagram below shows the high-level states. States $q_2$--$q_4$ implement the mark-and-copy loop; $q_5$ restores marked symbols.
 
@@ -1438,6 +2448,12 @@ This simulates repeated addition.
 Is there a class of languages or problems where non-halting acceptance is actually \emph{necessary},
 or can we always convert such a machine into one that halts as soon as it accepts?
 
+
+% ##############################################################################
+%
+%   PART III --- CLOSING SECTIONS
+%
+% ##############################################################################
 
 \section{Synthesis}
 
