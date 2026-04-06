@@ -2448,6 +2448,136 @@ This simulates repeated addition.
 Is there a class of languages or problems where non-halting acceptance is actually \emph{necessary},
 or can we always convert such a machine into one that halts as soon as it accepts?
 
+\subsection{Week 7}
+\subsubsection*{HW7 -- Decidability and Landau Notation}
+
+\paragraph{Exercise 2 -- Problems on Decidability}
+
+We classify each language as decidable, recursively enumerable (r.e.), or co-recursively enumerable (co-r.e.).
+
+\subparagraph{1. $L_1 := \{\, M \mid M \text{ halts on itself} \,\}$}
+
+This language is \textbf{recursively enumerable}, but \textbf{not decidable}.
+
+\textbf{Why it is r.e.:}
+Given a Turing machine $M$, we can simulate $M$ on its own encoding $\langle M \rangle$.
+If $M$ eventually halts on $\langle M \rangle$, then our simulator will also halt and accept.
+If $M$ never halts on $\langle M \rangle$, then the simulator runs forever.
+Therefore $L_1$ is recursively enumerable.
+
+\textbf{Why it is not decidable:}
+This is a version of the halting problem.
+If we could decide whether $M$ halts on itself, then we would be able to solve a halting-type problem algorithmically, which is impossible.
+Thus $L_1$ is undecidable.
+
+\textbf{About the complement:}
+Since $L_1$ is r.e.\ but not decidable, its complement cannot also be r.e.
+Otherwise both $L_1$ and $\overline{L_1}$ would be r.e., which would imply that $L_1$ is decidable.
+So $\overline{L_1}$ is \textbf{not} r.e., meaning $L_1$ is \textbf{not co-r.e.}
+
+\[
+\boxed{L_1 \text{ is r.e.\ but neither decidable nor co-r.e.}}
+\]
+
+\subparagraph{2. $L_2 := \{\, (M,w) \mid M \text{ halts on the word } w \,\}$}
+
+This language is also \textbf{recursively enumerable}, but \textbf{not decidable}.
+
+\textbf{Why it is r.e.:}
+Given $(M,w)$, simulate $M$ on input $w$.
+If $M$ halts, accept.
+If $M$ does not halt, the simulation continues forever.
+Hence $L_2$ is recursively enumerable.
+
+\textbf{Why it is not decidable:}
+This is exactly the standard halting problem, which is known to be undecidable.
+
+\textbf{About the complement:}
+For the same reason as above, $\overline{L_2}$ is not recursively enumerable.
+If both $L_2$ and $\overline{L_2}$ were r.e., then $L_2$ would be decidable, contradicting undecidability.
+
+\[
+\boxed{L_2 \text{ is r.e.\ but neither decidable nor co-r.e.}}
+\]
+
+\subparagraph{3. $L_3 := \{\, (M,w,k) \mid M \text{ halts on } w \text{ in at most } k \text{ steps} \,\}$}
+
+This language is \textbf{decidable}.
+
+\textbf{Decision procedure:}
+Given $(M,w,k)$, simulate $M$ on input $w$ for exactly $k$ steps.
+\begin{itemize}
+    \item If $M$ halts within those $k$ steps, accept.
+    \item If it has not halted after $k$ steps, reject.
+\end{itemize}
+
+This always terminates, because $k$ is a fixed finite bound.
+Therefore $L_3$ is decidable.
+
+Since every decidable language is also both r.e.\ and co-r.e., we conclude:
+
+\[
+\boxed{L_3 \text{ is decidable (and therefore also r.e.\ and co-r.e.)}}
+\]
+
+\paragraph{Exercise 4 -- Landau Notation}
+
+We compare the following asymptotic classes.
+
+\subparagraph{1. $\mathcal{O}(n)$ and $\mathcal{O}(\sqrt{n})$}
+
+Since $\sqrt{n} \le n$ for all $n \ge 1$, every function in $\mathcal{O}(\sqrt{n})$ is also in $\mathcal{O}(n)$.
+However, not every linear function is bounded by a constant multiple of $\sqrt{n}$.
+
+\[
+\boxed{\mathcal{O}(\sqrt{n}) \subsetneq \mathcal{O}(n)}
+\]
+
+\subparagraph{2. $\mathcal{O}(n^2)$ and $\mathcal{O}(2^n)$}
+
+Exponential growth dominates polynomial growth.
+In particular, $n^2 = O(2^n)$, but $2^n \notin O(n^2)$.
+
+\[
+\boxed{\mathcal{O}(n^2) \subsetneq \mathcal{O}(2^n)}
+\]
+
+\subparagraph{3. $\mathcal{O}(\log n)$ and $\mathcal{O}(\log n \cdot \log n)$}
+
+We have $\log n \le (\log n)^2$ for all sufficiently large $n$, so every function in $\mathcal{O}(\log n)$ is also in $\mathcal{O}((\log n)^2)$.
+The reverse inclusion does not hold in general.
+
+\[
+\boxed{\mathcal{O}(\log n) \subsetneq \mathcal{O}((\log n)^2)}
+\]
+
+\subparagraph{4. $\mathcal{O}(2^n)$ and $\mathcal{O}(3^n)$}
+
+Because $2^n \le 3^n$ for all $n$, every function in $\mathcal{O}(2^n)$ is also in $\mathcal{O}(3^n)$.
+But $3^n$ grows strictly faster than $2^n$, so the inclusion is proper.
+
+\[
+\boxed{\mathcal{O}(2^n) \subsetneq \mathcal{O}(3^n)}
+\]
+
+\subparagraph{5. $\mathcal{O}(\log_2 n)$ and $\mathcal{O}(\log_3 n)$}
+
+By the change-of-base formula,
+\[
+\log_2 n = \frac{\log_3 n}{\log_3 2}.
+\]
+Thus $\log_2 n$ and $\log_3 n$ differ only by a constant factor, so they define the same asymptotic class.
+
+\[
+\boxed{\mathcal{O}(\log_2 n) = \mathcal{O}(\log_3 n)}
+\]
+
+\paragraph{Discord Question}
+
+One thing I found interesting in this homework is the relationship between decidable, recursively enumerable, and co-recursively enumerable languages. 
+
+My question is: if a language is known to be recursively enumerable, what are the most common proof strategies for showing that its complement is \emph{not} recursively enumerable? Is the usual approach to reduce from the complement of the halting problem, or are there other standard techniques that are used often in practice?
+
 
 % ##############################################################################
 %
