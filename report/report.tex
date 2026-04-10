@@ -192,6 +192,9 @@
       12. & Turing Machines \& Computability \\
       13. & The Halting Problem \\
       14. & Decidability Problems \\
+      15. & Landau Notation (Big~O) \\
+      16. & Complexity Classes (P vs NP) \\
+      17. & Propositional Logic \& SAT \\
     \end{tabular}
   }\\[2em]
   \rule{0.5\linewidth}{1pt}
@@ -1024,7 +1027,360 @@ program $S$ $\to$ derive $S(S)$ paradox) is the key proof technique.
 \end{notebox}
 
 % ==============================================================================
-\newpage
+\section{Landau Notation (Big~O)}
+% ==============================================================================
+
+The definition of Big~O is less important for its raw mathematical content than for the
+powerful \emph{metaphor} it creates.  This metaphor underpins all of practical software
+engineering: we classify algorithms into broad clusters according to the resources they
+consume (time or space) without worrying about exact constants or low-order terms.
+
+\subsection{Growth of Functions}
+
+Before defining Big~O, it is useful to develop intuition for how quickly common functions
+grow.  Listed from slowest to fastest growth:
+\[
+  \log(\log n)
+  \;\ll\;
+  \log n
+  \;\ll\;
+  n
+  \;\ll\;
+  n^2
+  \;\ll\;
+  2^n
+  \;\ll\;
+  e^n
+  \;\ll\;
+  n!
+  \;\ll\;
+  2^{2^n}
+\]
+
+\begin{notebox}
+\textbf{Useful identities.}
+$e^{\log n}=n$ and $e^{2\log n}=n^2$, so these seemingly
+exotic expressions reduce to familiar polynomial growth.
+\end{notebox}
+
+\subsection{Definition}
+
+\begin{defbox}
+\textbf{Definition (Big~O).}
+Given non-negative functions $f,g\colon\mathbb{N}\to\mathbb{R}_{\geq 0}$, we write
+\[
+  f\in\mathcal{O}(g)
+\]
+if there exist constants $N$ and $M$ such that $f(n)\leq M\cdot g(n)$ for all $n\geq N$.
+\end{defbox}
+
+Informally, $f\in\mathcal{O}(g)$ means $f$ grows \emph{no faster} than $g$, up to a constant
+factor and for large enough inputs.
+
+\subsection{Key Properties}
+
+For functions $f,g,h\colon\mathbb{N}\to\mathbb{R}_{\geq 0}$:
+\begin{enumerate}[itemsep=3pt]
+  \item \textbf{Reflexivity:} $f\in\mathcal{O}(f)$.
+  \item \textbf{Constant factors vanish:} $\mathcal{O}(c\cdot f)=\mathcal{O}(f)$ for any
+        constant $c>0$.
+  \item \textbf{Monotonicity:} if $f\leq g$ for large inputs, then
+        $\mathcal{O}(f)\subseteq\mathcal{O}(g)$.
+  \item \textbf{Sum rule:} $\mathcal{O}(f+g)=\mathcal{O}(\max(f,g))$.
+  \item \textbf{Polynomials:} $\mathcal{O}\!\bigl(\sum_{i=0}^k a_i n^i\bigr)=\mathcal{O}(n^k)$.
+  \item \textbf{Log vs.\ polynomial:} $\mathcal{O}(\log n)\subseteq\mathcal{O}(n)$ and
+        $\mathcal{O}(n\log n)\subseteq\mathcal{O}(n^2)$.
+\end{enumerate}
+
+\begin{insightbox}
+\textbf{Practical consequence.}  When analysing an algorithm's runtime $T(n)$, we keep only
+the dominant term and drop constant factors.  For example, $T(n)=5n^3+200n^2+7$ is
+$\mathcal{O}(n^3)$.
+\end{insightbox}
+
+\subsection{Classifying Algorithms}
+
+Big~O gives us a language for comparing algorithms:
+
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  Complexity class & Example algorithms \\
+  \midrule
+  $\mathcal{O}(1)$        & Hash table lookup \\
+  $\mathcal{O}(\log n)$   & Binary search \\
+  $\mathcal{O}(n)$        & Linear scan \\
+  $\mathcal{O}(n\log n)$  & Merge sort, quick sort (average) \\
+  $\mathcal{O}(n^2)$      & Bubble sort, insertion sort \\
+  $\mathcal{O}(2^n)$      & Brute-force subset enumeration \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ==============================================================================
+\section{Complexity Classes (P vs NP)}
+% ==============================================================================
+
+With Big~O notation in hand, we can now classify \emph{problems} (not just algorithms) by
+their inherent computational difficulty.
+
+\subsection{Problems as Languages}
+
+Recall that we identify decision problems with formal languages over $\Sigma=\{0,1\}$: a
+decision problem $P$ corresponds to a language $L_P\subseteq\Sigma^*$ where
+$w\in L_P\iff P(w)$ is true.
+
+\subsection{The Classes P and NP}
+
+\begin{defbox}
+\textbf{Definition.}
+\begin{itemize}[itemsep=4pt]
+  \item $\mathrm{P}$ is the class of all languages decidable by a \textbf{deterministic}
+        Turing machine in polynomial time, i.e.\ in $\mathcal{O}(n^k)$ for some $k$.
+  \item $\mathrm{NP}$ is the class of all languages decidable by a \textbf{nondeterministic}
+        Turing machine in polynomial time.
+\end{itemize}
+\end{defbox}
+
+Intuitively, problems in $\mathrm{P}$ are \emph{efficiently solvable}, while problems in
+$\mathrm{NP}$ have solutions that are \emph{efficiently verifiable} (given a certificate).
+Since every deterministic TM is a special case of a nondeterministic one,
+$\mathrm{P}\subseteq\mathrm{NP}$.
+
+Whether $\mathrm{P}=\mathrm{NP}$ is one of the great open problems in mathematics and
+computer science (a Clay Millennium Prize problem).
+
+\begin{center}
+\begin{tabular}{ll}
+  \toprule
+  Problems in $\mathrm{P}$ & Problems in $\mathrm{NP}$ \\
+  \midrule
+  Sorting                   & Travelling Salesperson (TSP) \\
+  Multiplication            & Integer Factorisation \\
+  Rubik's Cube              & Sudoku \\
+  DFA membership            & Protein Folding \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Reductions and NP-Completeness}
+
+\begin{defbox}
+\textbf{Definition (Polynomial-time reduction).}
+We write $L_1\leq_{\mathrm{P}} L_2$ if there exists a polynomial-time computable function
+$f$ such that $w\in L_1\iff f(w)\in L_2$.  If such a reduction exists, then $L_2$ is
+``at least as hard'' as $L_1$.
+\end{defbox}
+
+\begin{defbox}
+\textbf{Definition (NP-completeness).}
+A language $L$ is \textbf{NP-complete} if:
+\begin{enumerate}
+  \item $L\in\mathrm{NP}$, and
+  \item for every $L'\in\mathrm{NP}$, $L'\leq_{\mathrm{P}} L$ \;($L$ is \textbf{NP-hard}).
+\end{enumerate}
+\end{defbox}
+
+\begin{theorem}
+If $P_1$ is NP-complete, $P_2\in\mathrm{NP}$, and $P_1\leq_{\mathrm{P}} P_2$, then $P_2$
+is also NP-complete.
+\end{theorem}
+
+\begin{insightbox}
+\textbf{Key consequence.}  If \emph{any} NP-complete problem could be solved in polynomial
+time, then \emph{every} problem in NP could be solved in polynomial time, i.e.\
+$\mathrm{P}=\mathrm{NP}$.
+\end{insightbox}
+
+% ==============================================================================
+\section{Propositional Logic \& SAT}
+% ==============================================================================
+
+A fundamental NP-complete problem is $\mathrm{SAT}$, the \textbf{Boolean satisfiability
+problem}.  It asks: given a formula of propositional logic, is there an assignment of truth
+values that makes it true?
+
+\subsection{Boolean Propositional Logic}
+
+We work over an alphabet $\mathrm{Var}$ of propositional variables $p,q,r,\ldots$ that take
+values in $\{0,1\}$ (false/true).
+
+\begin{defbox}
+\textbf{Definition (Boolean formulas).}
+A \emph{formula} is an expression of one of the following forms:
+\begin{enumerate}[itemsep=2pt]
+  \item $\varphi\lor\psi$ \quad (disjunction / ``or'')
+  \item $\varphi\land\psi$ \quad (conjunction / ``and'')
+  \item $\lnot\varphi$ \quad (negation / ``not'')
+  \item $p$ \quad (a propositional variable)
+  \item $b\in\{0,1\}$ \quad (a truth value)
+\end{enumerate}
+\end{defbox}
+
+\begin{defbox}
+\textbf{Definition (Valuation).}
+A \emph{valuation} (or \emph{assignment}) is a function $\mathfrak{J}\colon\mathrm{Var}\to\{0,1\}$.
+It extends to all formulas by:
+\begin{align*}
+  \mathfrak{J}(\varphi\lor\psi)  &= \max(\mathfrak{J}(\varphi),\mathfrak{J}(\psi)) \\
+  \mathfrak{J}(\varphi\land\psi) &= \min(\mathfrak{J}(\varphi),\mathfrak{J}(\psi)) \\
+  \mathfrak{J}(\lnot\varphi)     &= 1-\mathfrak{J}(\varphi)
+\end{align*}
+\end{defbox}
+
+\textbf{Derived connectives:}
+\begin{itemize}
+  \item \emph{Implication:} $\varphi\to\psi := \lnot\varphi\lor\psi$
+  \item \emph{Equivalence:} $\varphi\leftrightarrow\psi := (\varphi\to\psi)\land(\psi\to\varphi)$
+\end{itemize}
+
+\textbf{Truth table} for the basic connectives:
+
+\begin{center}
+\begin{tabular}{cc|ccc}
+  \toprule
+  $p$ & $q$ & $p\lor q$ & $p\land q$ & $\lnot p$ \\
+  \midrule
+  $0$ & $0$ & $0$ & $0$ & $1$ \\
+  $0$ & $1$ & $1$ & $0$ & $1$ \\
+  $1$ & $0$ & $1$ & $0$ & $0$ \\
+  $1$ & $1$ & $1$ & $1$ & $0$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The SAT Problem}
+
+A formula $\varphi$ is \emph{satisfiable} if there exists a valuation $\mathfrak{J}$ with
+$\mathfrak{J}(\varphi)=1$.
+
+\begin{defbox}
+\textbf{Definition (SAT).}
+$\mathrm{SAT}$ is the language of (encodings of) all satisfiable Boolean formulas.
+\end{defbox}
+
+\begin{theorem}[Cook--Levin]
+$\mathrm{SAT}$ is NP-complete.
+\end{theorem}
+
+\begin{insightbox}
+\textbf{Consequence.}  If $\mathrm{SAT}$ could be solved in polynomial time, then
+$\mathrm{P}=\mathrm{NP}$.  The Cook--Levin theorem was the first proof that an NP-complete
+problem exists, and it anchors the entire theory of NP-completeness: to show a new problem
+is NP-complete, one reduces $\mathrm{SAT}$ (or another known NP-complete problem) to it.
+\end{insightbox}
+
+\subsection{Conjunctive Normal Form (CNF)}
+
+For algorithmic purposes (e.g.\ SAT-solving), formulas are often converted to a standard
+format.
+
+\begin{defbox}
+\textbf{Definition (CNF).}
+A formula is in \emph{conjunctive normal form} if it is a conjunction of \emph{clauses},
+where each clause is a disjunction of \emph{literals} (a variable $p$ or its negation
+$\lnot p$):
+\[
+  \varphi \;=\; \bigwedge_i \bigvee_j \ell_{i,j}
+\]
+\end{defbox}
+
+\begin{example}
+The formula $\lnot p\land(p\lor\lnot q)$ is in CNF (two clauses: $\lnot p$ and $p\lor\lnot q$).
+
+The formula $(p\lor\lnot q)\land(\lnot p\lor q\lor r)\land p$ is also in CNF.
+\end{example}
+
+Every Boolean formula can be converted into an equivalent CNF formula (one that preserves
+satisfiability).  This is important because many SAT-solvers require their input in CNF.
+
+\subsection{De Morgan's Laws}
+
+De Morgan's laws are essential tools for manipulating Boolean formulas, particularly when
+converting to CNF or simplifying negations of complex expressions.
+
+\begin{defbox}
+\textbf{De Morgan's Laws.}  For any formulas $\varphi$ and $\psi$:
+\begin{align*}
+  \lnot(\varphi\lor\psi)  &\;\equiv\; \lnot\varphi\land\lnot\psi \\
+  \lnot(\varphi\land\psi) &\;\equiv\; \lnot\varphi\lor\lnot\psi
+\end{align*}
+In words: negation distributes over disjunction and conjunction by swapping the connective.
+\end{defbox}
+
+These laws generalise to arbitrary numbers of terms:
+\[
+  \lnot\bigvee_{i=1}^n \varphi_i \;\equiv\; \bigwedge_{i=1}^n \lnot\varphi_i
+  \qquad\qquad
+  \lnot\bigwedge_{i=1}^n \varphi_i \;\equiv\; \bigvee_{i=1}^n \lnot\varphi_i
+\]
+
+\begin{example}
+Converting $\lnot\bigl((a\land b)\lor(\lnot c\land d)\bigr)$ to CNF using De~Morgan's laws:
+\begin{align*}
+  &\lnot\bigl((a\land b)\lor(\lnot c\land d)\bigr) \\
+  &\equiv\; \lnot(a\land b)\;\land\;\lnot(\lnot c\land d)
+    &&\text{(De Morgan: $\lnot(\cdot\lor\cdot)$)} \\
+  &\equiv\; (\lnot a\lor\lnot b)\;\land\;(c\lor\lnot d)
+    &&\text{(De Morgan: $\lnot(\cdot\land\cdot)$, double negation)}
+\end{align*}
+The result $(\lnot a\lor\lnot b)\land(c\lor\lnot d)$ is already in CNF.
+\end{example}
+
+\begin{insightbox}
+\textbf{Connection to SAT.}  De~Morgan's laws are the primary mechanism for ``pushing
+negations inward'' through a formula.  This is a key step in converting any Boolean formula
+to CNF, which is the standard input format for SAT-solvers.  Combined with the
+distributive law $\varphi\lor(\psi\land\chi)\equiv(\varphi\lor\psi)\land(\varphi\lor\chi)$,
+De~Morgan's laws let us systematically rewrite any formula into a conjunction of clauses.
+\end{insightbox}
+
+\subsection{Resolution}
+
+Resolution is a proof technique for determining whether a CNF formula is unsatisfiable.
+It operates directly on clauses, combining pairs that contain complementary literals.
+
+\begin{defbox}
+\textbf{Definition (Resolvent).}
+Let $C_1$ and $C_2$ be clauses such that $C_1$ contains a literal $\ell$ and $C_2$ contains
+$\lnot\ell$.  The \emph{resolvent} of $C_1$ and $C_2$ on $\ell$ is:
+\[
+  \mathrm{Res}(C_1,C_2) \;=\; (C_1\setminus\{\ell\})\;\cup\;(C_2\setminus\{\lnot\ell\})
+\]
+That is, we cancel the complementary pair and merge the remaining literals.
+\end{defbox}
+
+\begin{example}
+Let $C_1=(p\lor q)$ and $C_2=(\lnot p\lor r)$.  Resolving on $p$:
+\[
+  \mathrm{Res}(C_1,C_2) \;=\; (q\lor r)
+\]
+\end{example}
+
+\begin{defbox}
+\textbf{Resolution Refutation.}
+Given a CNF formula, repeatedly resolve pairs of clauses and add the resolvents to the
+clause set.  If the \textbf{empty clause} $\square$ is derived (all literals cancel out),
+the formula is \textbf{unsatisfiable}.
+\end{defbox}
+
+\begin{example}
+Show that $\varphi=(p)\land(\lnot p\lor q)\land(\lnot q)$ is unsatisfiable:
+\begin{enumerate}
+  \item Resolve $(p)$ and $(\lnot p\lor q)$ on $p$ $\;\Rightarrow\;$ $(q)$
+  \item Resolve $(q)$ and $(\lnot q)$ on $q$ $\;\Rightarrow\;$ $\square$
+\end{enumerate}
+The empty clause is derived, so $\varphi$ is unsatisfiable.
+\end{example}
+
+\begin{insightbox}
+\textbf{Why resolution matters.}  Resolution is \emph{sound} (if $\square$ is derived, the
+formula is truly unsatisfiable) and \emph{refutation-complete} (if a CNF formula is
+unsatisfiable, resolution will eventually derive $\square$).  It is one of the core
+techniques underlying modern SAT-solvers.
+\end{insightbox}
+
+% ==============================================================================
 \section*{Quick Reference Summary}
 \addcontentsline{toc}{section}{Quick Reference Summary}
 % ==============================================================================
@@ -1064,7 +1420,7 @@ program $S$ $\to$ derive $S(S)$ paradox) is the key proof technique.
   Pumping Lemma &
     Regular $L\Rightarrow\exists n$ s.t.\ long words pump.
     Used only to prove non-regularity via contradiction. \\
-  Turing machines &
+    Turing machines &
     7-tuple.  Infinite tape with R/W head.
     Extends DFAs.  Models all algorithmic computation. \\
   Decidability &
@@ -1079,6 +1435,37 @@ program $S$ $\to$ derive $S(S)$ paradox) is the key proof technique.
   TM undecidability &
     Halting, emptiness, equivalence, regularity --- all undecidable.  Rice's theorem:
     any non-trivial language property of a TM is undecidable. \\
+  Big~O notation &
+    $f\in\mathcal{O}(g)$ if $f(n)\leq M\cdot g(n)$ for large $n$.
+    Classifies algorithms by growth rate, ignoring constants. \\
+  P vs NP &
+    $\mathrm{P}$: poly-time solvable.  $\mathrm{NP}$: poly-time verifiable.
+    $\mathrm{P}\subseteq\mathrm{NP}$; whether $\mathrm{P}=\mathrm{NP}$ is open. \\
+  NP-completeness &
+    $L$ is NP-complete if $L\in\mathrm{NP}$ and every NP problem reduces to $L$.
+    If any NP-complete problem is in P, then $\mathrm{P}=\mathrm{NP}$. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\bfseries}p{4cm} p{9.5cm}}
+  \toprule
+  Concept & Key Idea \\
+  \midrule
+  SAT &
+    Boolean satisfiability.  NP-complete by Cook--Levin.
+    CNF: conjunction of clauses (disjunctions of literals). \\
+  De Morgan's laws &
+    $\lnot(\varphi\lor\psi)\equiv\lnot\varphi\land\lnot\psi$ and
+    $\lnot(\varphi\land\psi)\equiv\lnot\varphi\lor\lnot\psi$.
+    Used to push negations inward when converting to CNF. \\
+  Resolution &
+    Combine clauses with complementary literals $\ell$ and $\lnot\ell$; cancel the pair,
+    merge the rest.  Deriving $\square$ proves unsatisfiability. \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -2577,6 +2964,79 @@ Thus $\log_2 n$ and $\log_3 n$ differ only by a constant factor, so they define 
 One thing I found interesting in this homework is the relationship between decidable, recursively enumerable, and co-recursively enumerable languages. 
 
 My question is: if a language is known to be recursively enumerable, what are the most common proof strategies for showing that its complement is \emph{not} recursively enumerable? Is the usual approach to reduce from the complement of the halting problem, or are there other standard techniques that are used often in practice?
+
+\subsection{Week 8}
+\subsubsection*{HW8 -- Propositional Logic and SAT}
+
+\paragraph{Exercise 1 -- Rewriting formulas in CNF}
+
+\subparagraph{1. $\varphi_1 := \lnot\bigl((a\land b)\lor(\lnot c\land d)\bigr)$}
+
+Apply De~Morgan's law to distribute the outer negation:
+\begin{align*}
+\varphi_1
+&= \lnot(a\land b)\;\land\;\lnot(\lnot c\land d) \\
+&= (\lnot a\lor\lnot b)\;\land\;(c\lor\lnot d)
+\end{align*}
+
+\subparagraph{2. $\varphi_2 := \lnot\bigl((p\lor q)\to(r\land\lnot s)\bigr)$}
+
+First replace the implication using $\alpha\to\beta\equiv\lnot\alpha\lor\beta$:
+\[
+\varphi_2 = \lnot\bigl(\lnot(p\lor q)\lor(r\land\lnot s)\bigr)
+\]
+Apply De~Morgan's law to the outer negation:
+\[
+= (p\lor q)\;\land\;\lnot(r\land\lnot s)
+\]
+Apply De~Morgan again to the second term:
+\[
+= (p\lor q)\;\land\;(\lnot r\lor s)
+\]
+
+\paragraph{Exercise 2 -- Satisfiability}
+
+\subparagraph{1. $\psi_1 := (a\lor\lnot b)\land(\lnot a\lor b)\land(\lnot a\lor\lnot b)$}
+
+\textbf{Satisfiable.}  Set $a=0,\;b=0$:
+\begin{itemize}
+  \item $(0\lor 1)=1$
+  \item $(1\lor 0)=1$
+  \item $(1\lor 1)=1$
+\end{itemize}
+All clauses are satisfied.
+
+\subparagraph{2. $\psi_2 := (\lnot p\lor q)\land(\lnot q\lor r)\land\lnot(\lnot p\lor r)$}
+
+\textbf{Not satisfiable.}
+
+First simplify the third clause using De~Morgan:
+\[
+\lnot(\lnot p\lor r) \;\equiv\; p\land\lnot r
+\]
+This forces $p=1$ and $r=0$.  Substituting into the remaining clauses:
+\begin{itemize}
+  \item $(\lnot p\lor q) = (0\lor q) = q$, so $q=1$ is forced.
+  \item $(\lnot q\lor r) = (0\lor 0) = 0$.  Contradiction.
+\end{itemize}
+No satisfying assignment exists.
+
+\subparagraph{3. $\psi_3 := (x\lor y)\land(\lnot x\lor y)\land(x\lor\lnot y)\land(\lnot x\lor\lnot y)$}
+
+\textbf{Not satisfiable.}
+
+We can show this by resolution:
+\begin{itemize}
+  \item Resolve $(x\lor y)$ and $(\lnot x\lor y)$ on $x$: resolvent is $(y)$.
+  \item Resolve $(x\lor\lnot y)$ and $(\lnot x\lor\lnot y)$ on $x$: resolvent is $(\lnot y)$.
+  \item Resolve $(y)$ and $(\lnot y)$ on $y$: resolvent is $\square$ (the empty clause).
+\end{itemize}
+Deriving $\square$ proves the formula is unsatisfiable.
+
+\paragraph{Discord Question}
+
+Something I noticed in Exercise~2 is how resolution can serve as a systematic alternative to truth-table enumeration for proving unsatisfiability.
+Is resolution always more efficient than brute-force checking of all $2^n$ assignments, or are there families of formulas where resolution proofs are exponentially long?
 
 
 % ##############################################################################
